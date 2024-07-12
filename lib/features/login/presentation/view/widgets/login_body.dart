@@ -15,7 +15,6 @@ class LoginBody extends StatefulWidget {
 }
 
 class _LoginBodyState extends State<LoginBody> {
-
   TextEditingController name = TextEditingController();
   var nameFromKey = GlobalKey<FormState>();
   final ImagePicker picker = ImagePicker();
@@ -24,9 +23,10 @@ class _LoginBodyState extends State<LoginBody> {
 
   pickPhoto(ImageSource imageSource) async {
     image = await picker.pickImage(source: imageSource);
-    setState(() {
-
-    });
+    if (image != null) {
+      Navigator.pop(context);
+    }
+    setState(() {});
   }
 
   @override
@@ -65,7 +65,7 @@ class _LoginBodyState extends State<LoginBody> {
                                                   .size
                                                   .height *
                                               0.05,
-                                          color: AppColors.labni1,
+                                          color: AppColors.mainColor,
                                         ),
                                         Text(
                                           AppTexts.gallery,
@@ -97,7 +97,7 @@ class _LoginBodyState extends State<LoginBody> {
                                                   .size
                                                   .height *
                                               0.05,
-                                          color: AppColors.labni1,
+                                          color: AppColors.mainColor,
                                         ),
                                         Text(
                                           AppTexts.camera,
@@ -121,7 +121,7 @@ class _LoginBodyState extends State<LoginBody> {
                 },
                 child: Container(
                   height: MediaQuery.of(context).size.height * 0.15,
-                  width: MediaQuery.of(context).size.width * 0.25,
+                  width: MediaQuery.of(context).size.width * 0.3,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(
                         MediaQuery.of(context).size.width * 0.03),
@@ -130,15 +130,19 @@ class _LoginBodyState extends State<LoginBody> {
                   child: image == null
                       ? Icon(
                           Icons.add_a_photo,
-                          color: AppColors.labni1,
+                          color: AppColors.mainColor,
                           size: MediaQuery.of(context).size.height * 0.05,
                         )
                       : ClipRRect(
-                    borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width * 0.03),
-                        child: Image.file(
-                            File(image!.path),
+                          borderRadius: BorderRadius.circular(
+                              MediaQuery.of(context).size.width * 0.03),
+                          child: Image.file(
+                            File(
+                              image!.path,
+                            ),
+                            fit: BoxFit.cover,
                           ),
-                      ),
+                        ),
                 ),
               ),
             ],
@@ -167,19 +171,16 @@ class _LoginBodyState extends State<LoginBody> {
                                   children: [
                                     Icon(
                                       Icons.photo_size_select_actual,
-                                      size: MediaQuery.of(context)
-                                          .size
-                                          .height *
+                                      size: MediaQuery.of(context).size.height *
                                           0.05,
-                                      color: AppColors.labni1,
+                                      color: AppColors.mainColor,
                                     ),
                                     Text(
                                       AppTexts.gallery,
                                       style: TextStyle(
-                                        fontSize: MediaQuery.of(context)
-                                            .size
-                                            .height *
-                                            0.02,
+                                        fontSize:
+                                            MediaQuery.of(context).size.height *
+                                                0.02,
                                         color: AppColors.grey1,
                                       ),
                                     ),
@@ -199,19 +200,16 @@ class _LoginBodyState extends State<LoginBody> {
                                   children: [
                                     Icon(
                                       Icons.add_a_photo,
-                                      size: MediaQuery.of(context)
-                                          .size
-                                          .height *
+                                      size: MediaQuery.of(context).size.height *
                                           0.05,
-                                      color: AppColors.labni1,
+                                      color: AppColors.mainColor,
                                     ),
                                     Text(
                                       AppTexts.camera,
                                       style: TextStyle(
-                                        fontSize: MediaQuery.of(context)
-                                            .size
-                                            .height *
-                                            0.02,
+                                        fontSize:
+                                            MediaQuery.of(context).size.height *
+                                                0.02,
                                         color: AppColors.grey1,
                                       ),
                                     ),
@@ -269,7 +267,7 @@ class _LoginBodyState extends State<LoginBody> {
                       child: TextFormField(
                         controller: name,
                         validator: (value) {
-                          if(value == null || value.isEmpty == true){
+                          if (value == null || value.isEmpty == true) {
                             return "Please Enter Your Name";
                           }
                           return null;
@@ -299,19 +297,101 @@ class _LoginBodyState extends State<LoginBody> {
                 horizontal: MediaQuery.of(context).size.width * 0.04),
             child: MaterialButton(
               onPressed: () {
-                if(nameFromKey.currentState!.validate()){
+                if (nameFromKey.currentState!.validate()) {
                   FocusScope.of(context).requestFocus(
                     FocusNode(),
                   );
-                  Navigator.push(
+                  if (image == null) {
+                    showModalBottomSheet(
+                        context: context,
+                        builder: (context) {
+                          return Padding(
+                            padding: EdgeInsets.all(
+                                MediaQuery.of(context).size.height * 0.03),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      pickPhoto(ImageSource.gallery);
+                                    },
+                                    child: SizedBox(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(
+                                            Icons.photo_size_select_actual,
+                                            size: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.05,
+                                            color: AppColors.mainColor,
+                                          ),
+                                          Text(
+                                            AppTexts.gallery,
+                                            style: TextStyle(
+                                              fontSize: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.02,
+                                              color: AppColors.grey1,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      pickPhoto(ImageSource.camera);
+                                    },
+                                    child: SizedBox(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(
+                                            Icons.add_a_photo,
+                                            size: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.05,
+                                            color: AppColors.mainColor,
+                                          ),
+                                          Text(
+                                            AppTexts.camera,
+                                            style: TextStyle(
+                                              fontSize: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.02,
+                                              color: AppColors.grey1,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        });
+                  } else {
+                    Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context){
-                        return const HomeScreen();
+                      MaterialPageRoute(builder: (context) {
+                        return HomeScreen(
+                          name: name.text.trim(),
+                          photo: File(image!.path),
+                        );
                       }),
-                  );
+                    );
+                  }
                 }
               },
-              color: AppColors.labni1,
+              color: AppColors.mainColor,
               height: MediaQuery.of(context).size.height * 0.06,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(

@@ -55,7 +55,7 @@ class OnBoardingBody extends StatelessWidget {
                 }),
               );
             },
-            color: AppColors.labni1,
+            color: AppColors.mainColor,
             height: MediaQuery.of(context).size.height * 0.06,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(
