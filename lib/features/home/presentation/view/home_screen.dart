@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:todo/core/utils/app_colors.dart';
+import 'package:todo/features/add_note/presentation/view/add_note_screen.dart';
 import 'package:todo/features/home/presentation/view/widgets/home_body.dart';
+import 'package:todo/features/home/presentation/view/widgets/home_drawer.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key, required this.photo, required this.name});
@@ -15,7 +17,14 @@ class HomeScreen extends StatelessWidget {
       child: Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context){
+                return const AddNoteScreen();
+              }),
+            );
+          },
           backgroundColor: AppColors.mainColor,
           shape: RoundedRectangleBorder(
             borderRadius:
@@ -27,8 +36,9 @@ class HomeScreen extends StatelessWidget {
             size: MediaQuery.of(context).size.width * 0.08,
           ),
         ),
-        drawer: Drawer(
-          child: Text("Atef Elhamsa"),
+        drawer: HomeDrawer(
+          name: name,
+          photo: photo,
         ),
         body: HomeBody(
           name: name,

@@ -1,8 +1,6 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import '../../../../../core/utils/app_colors.dart';
 import '../../../../../core/utils/app_images.dart';
 import '../../../../../core/utils/app_texts.dart';
@@ -78,7 +76,7 @@ class CustomAppBar extends StatelessWidget {
           ),
           Expanded(
             child: CircleAvatar(
-              radius: MediaQuery.of(context).size.width * 0.07,
+              radius: MediaQuery.of(context).size.width * 0.065,
               backgroundColor: AppColors.white,
               child: CircleAvatar(
                 radius: MediaQuery.of(context).size.width * 0.06,

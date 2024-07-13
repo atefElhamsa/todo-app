@@ -12,4 +12,17 @@ class AppTexts {
   static const String camera = "Camera";
   static const String hello = "Hello!";
   static const String done = "Done";
+  static const String doneTasks = "Done Tasks";
+  static const String archivedTasks = "Archived Tasks";
+  static const String addTask = "Add Task";
+  static const String taskName = "Task Name";
+  static const String enterTaskName = "Enter The Task Name";
+  static const String description = "Description";
+  static const String enterTaskDescription = "Enter The Task Description";
+  static const String startDate = "Start Date";
+  static const String endDate = "End Date";
+  static const String addTime = "Add Time";
+  static const String enterStartDate = "Enter The Start Date";
+  static const String enterEndDate = "Enter The End Date";
+  static const String setTimeForTask = "Set a Time For The Task";
 }

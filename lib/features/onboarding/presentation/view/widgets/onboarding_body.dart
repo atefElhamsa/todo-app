@@ -76,7 +76,7 @@ class OnBoardingBody extends StatelessWidget {
                     ),
                   ),
                 ),
-                Image.asset(AppImages.arrowLeft),
+                Image.asset(AppImages.arrowRight),
               ],
             ),
           ),

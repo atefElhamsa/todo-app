@@ -1,7 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:todo/core/shared_widgets/custom_field.dart';
 import 'package:todo/core/utils/app_colors.dart';
 import 'package:todo/core/utils/app_images.dart';
 import 'package:todo/core/utils/app_texts.dart';
@@ -237,57 +240,12 @@ class _LoginBodyState extends State<LoginBody> {
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.06,
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.width * 0.04),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(
-                    MediaQuery.of(context).size.width * 0.03),
-                border: Border.all(color: AppColors.labni2),
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: MediaQuery.of(context).size.width * 0.02),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      AppTexts.yourName,
-                      style: GoogleFonts.lexendDeca(
-                        textStyle: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          color: AppColors.grey2,
-                          fontSize: MediaQuery.of(context).size.height * 0.025,
-                        ),
-                      ),
-                    ),
-                    Form(
-                      key: nameFromKey,
-                      child: TextFormField(
-                        controller: name,
-                        validator: (value) {
-                          if (value == null || value.isEmpty == true) {
-                            return "Please Enter Your Name";
-                          }
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                          hintText: AppTexts.enterYourName,
-                          hintStyle: TextStyle(
-                              fontSize:
-                                  MediaQuery.of(context).size.height * 0.02),
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                          errorBorder: InputBorder.none,
-                          focusedErrorBorder: InputBorder.none,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+          CustomTextField(
+            nameFromKey: nameFromKey,
+            controller: name,
+            title: AppTexts.yourName,
+            subTitle: AppTexts.enterYourName,
+            borderColor: AppColors.labni2,
           ),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.08,
