@@ -1,15 +1,23 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:todo/core/shared_widgets/custom_field.dart';
 import 'package:todo/core/utils/app_colors.dart';
 import 'package:todo/core/utils/app_images.dart';
 import 'package:todo/core/utils/app_texts.dart';
+import 'package:todo/features/home/data/model/note_model.dart';
+
+import '../../../../home/presentation/view/home_screen.dart';
 
 class AddNoteBody extends StatefulWidget {
-  const AddNoteBody({super.key});
+  const AddNoteBody({super.key, required this.name, required this.image});
+
+  final String name;
+  final File image;
 
   @override
-  State<AddNoteBody> createState() => _AddNoteBodyState();
+  State<AddNoteBody> createState() => _AddNoteBodyState(this.name, this.image);
 }
 
 class _AddNoteBodyState extends State<AddNoteBody> {
@@ -17,6 +25,18 @@ class _AddNoteBodyState extends State<AddNoteBody> {
   var nameFromKeyTask = GlobalKey<FormState>();
   TextEditingController descriptionName = TextEditingController();
   var nameFromKeyDescription = GlobalKey<FormState>();
+  DateTime dateTimeNow = DateTime.now();
+  DateTime? startDate;
+  DateTime? endDate;
+  TimeOfDay? time;
+
+  String name;
+  File image;
+
+  _AddNoteBodyState(this.name, this.image);
+  String convertDateString(DateTime date) {
+    return date.toString().split(" ")[0];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,17 +87,22 @@ class _AddNoteBodyState extends State<AddNoteBody> {
             ),
             leading: Image.asset(AppImages.calendar),
             trailing: GestureDetector(
-              onTap: () {
-                showDatePicker(
+              onTap: () async {
+                startDate = await showDatePicker(
                   context: context,
-                  firstDate: DateTime.now(),
-                  lastDate: DateTime.now(),
+                  firstDate: dateTimeNow,
+                  lastDate: dateTimeNow.add(
+                    const Duration(days: 31),
+                  ),
                 );
+                setState(() {});
               },
               child: Image.asset(AppImages.arrowDown),
             ),
             subtitle: Text(
-              AppTexts.enterStartDate,
+              startDate == null
+                  ? AppTexts.enterStartDate
+                  : convertDateString(startDate!),
               style: GoogleFonts.lexendDeca(
                 textStyle: TextStyle(
                   fontWeight: FontWeight.w400,
@@ -113,19 +138,22 @@ class _AddNoteBodyState extends State<AddNoteBody> {
             ),
             leading: Image.asset(AppImages.calendar),
             trailing: GestureDetector(
-              onTap: () {
-                showDatePicker(
+              onTap: () async {
+                endDate = await showDatePicker(
                   context: context,
-                  firstDate: DateTime.now(),
-                  lastDate: DateTime.now().add(
+                  firstDate: dateTimeNow,
+                  lastDate: dateTimeNow.add(
                     const Duration(days: 365),
                   ),
                 );
+                setState(() {});
               },
               child: Image.asset(AppImages.arrowDown),
             ),
             subtitle: Text(
-              AppTexts.enterEndDate,
+              endDate == null
+                  ? AppTexts.enterEndDate
+                  : convertDateString(endDate!),
               style: GoogleFonts.lexendDeca(
                 textStyle: TextStyle(
                   fontWeight: FontWeight.w400,
@@ -161,16 +189,17 @@ class _AddNoteBodyState extends State<AddNoteBody> {
             ),
             leading: Image.asset(AppImages.watch),
             trailing: GestureDetector(
-              onTap: () {
-                showTimePicker(
+              onTap: () async {
+                time = await showTimePicker(
                   context: context,
                   initialTime: TimeOfDay.now(),
                 );
+                setState(() {});
               },
               child: Image.asset(AppImages.arrowDown),
             ),
             subtitle: Text(
-              AppTexts.setTimeForTask,
+              time == null ? AppTexts.setTimeForTask : time!.format(context),
               style: GoogleFonts.lexendDeca(
                 textStyle: TextStyle(
                   fontWeight: FontWeight.w400,
@@ -188,12 +217,40 @@ class _AddNoteBodyState extends State<AddNoteBody> {
           padding: EdgeInsets.symmetric(
               horizontal: MediaQuery.of(context).size.width * 0.04),
           child: MaterialButton(
-            onPressed: () {},
+            onPressed: () {
+              if (time != null &&
+                  startDate != null &&
+                  endDate != null &&
+                  taskName.text.isNotEmpty &&
+                  descriptionName.text.isNotEmpty) {
+                notes.add(
+                  NoteModel(
+                    title: taskName.text.trim(),
+                    description: descriptionName.text.trim(),
+                    time: time!.format(context),
+                    startDate: convertDateString(startDate!),
+                    endDate: convertDateString(endDate!),
+                  ),
+                );
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context){
+                    return HomeScreen(photo: image, name: name);
+                  }),
+                );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Fill Data"),
+                  ),
+                );
+              }
+            },
             color: AppColors.mainColor,
             height: MediaQuery.of(context).size.height * 0.06,
             shape: RoundedRectangleBorder(
-              borderRadius:
-              BorderRadius.circular(MediaQuery.of(context).size.width * 0.03),
+              borderRadius: BorderRadius.circular(
+                  MediaQuery.of(context).size.width * 0.03),
             ),
             child: Row(
               children: [

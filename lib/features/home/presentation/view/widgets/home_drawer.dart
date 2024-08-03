@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:todo/core/utils/app_images.dart';
 import 'package:todo/core/utils/app_texts.dart';
+import 'package:todo/features/home/presentation/view/archived_tasks.dart';
+import 'package:todo/features/home/presentation/view/done_tasks.dart';
 import '../../../../../core/utils/app_colors.dart';
 
 class HomeDrawer extends StatelessWidget {
@@ -56,14 +58,27 @@ class HomeDrawer extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.02,),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.02,
+          ),
           Padding(
-            padding: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.06),
+            padding: EdgeInsets.only(
+                right: MediaQuery.of(context).size.width * 0.06),
             child: ListTile(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) {
+                    return const ArchivedTasks();
+                  }),
+                );
+              },
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(MediaQuery.of(context).size.width * 0.03),
-                  bottomRight: Radius.circular(MediaQuery.of(context).size.width * 0.03),
+                  topRight:
+                      Radius.circular(MediaQuery.of(context).size.width * 0.03),
+                  bottomRight:
+                      Radius.circular(MediaQuery.of(context).size.width * 0.03),
                 ),
               ),
               tileColor: AppColors.mainColor.withOpacity(0.1),
@@ -80,14 +95,27 @@ class HomeDrawer extends StatelessWidget {
               leading: Image.asset(AppImages.archeviedTasks),
             ),
           ),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.02,),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.02,
+          ),
           Padding(
-            padding: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.06),
+            padding: EdgeInsets.only(
+                right: MediaQuery.of(context).size.width * 0.06),
             child: ListTile(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) {
+                    return const DoneTasks();
+                  }),
+                );
+              },
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(MediaQuery.of(context).size.width * 0.03),
-                  bottomRight: Radius.circular(MediaQuery.of(context).size.width * 0.03),
+                  topRight:
+                      Radius.circular(MediaQuery.of(context).size.width * 0.03),
+                  bottomRight:
+                      Radius.circular(MediaQuery.of(context).size.width * 0.03),
                 ),
               ),
               tileColor: AppColors.mainColor.withOpacity(0.1),

@@ -5,12 +5,17 @@ import 'package:todo/features/add_note/presentation/view/add_note_screen.dart';
 import 'package:todo/features/home/presentation/view/widgets/home_body.dart';
 import 'package:todo/features/home/presentation/view/widgets/home_drawer.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, required this.photo, required this.name});
 
   final String name;
   final File photo;
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -21,7 +26,7 @@ class HomeScreen extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context){
-                return const AddNoteScreen();
+                return AddNoteScreen(name: widget.name, image: widget.photo,);
               }),
             );
           },
@@ -37,12 +42,12 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
         drawer: HomeDrawer(
-          name: name,
-          photo: photo,
+          name: widget.name,
+          photo: widget.photo,
         ),
         body: HomeBody(
-          name: name,
-          photo: photo,
+          name: widget.name,
+          photo: widget.photo,
         ),
       ),
     );

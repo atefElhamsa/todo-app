@@ -6,8 +6,8 @@ import '../../../../../core/utils/app_images.dart';
 import '../../../../../core/utils/app_texts.dart';
 import '../../../../home/presentation/view/widgets/dayname.dart';
 
-class CustomAppBar extends StatelessWidget {
-  const CustomAppBar({super.key, required this.photo, required this.name});
+class AppBarLogin extends StatelessWidget {
+  const AppBarLogin({super.key, required this.photo, required this.name});
 
   final String name;
   final File photo;
