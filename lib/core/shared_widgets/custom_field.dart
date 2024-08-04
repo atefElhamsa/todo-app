@@ -53,6 +53,9 @@ class CustomTextField extends StatelessWidget {
               Form(
                 key: nameFromKey,
                 child: TextFormField(
+                  onTapOutside: (event) {
+                    FocusManager.instance.primaryFocus?.unfocus();
+                  },
                   onFieldSubmitted: (value) {
                     FocusScope.of(context).requestFocus(
                       FocusNode(),

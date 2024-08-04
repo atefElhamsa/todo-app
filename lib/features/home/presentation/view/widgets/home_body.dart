@@ -5,6 +5,7 @@ import 'package:todo/core/utils/app_colors.dart';
 import 'package:todo/core/utils/app_images.dart';
 import 'package:todo/core/utils/app_texts.dart';
 import 'package:todo/features/home/data/model/note_model.dart';
+import 'package:todo/features/home/presentation/view/task_details.dart';
 import 'package:todo/features/login/presentation/view/widgets/appbar.dart';
 
 class HomeBody extends StatefulWidget {
@@ -20,11 +21,16 @@ class HomeBody extends StatefulWidget {
 class _HomeBodyState extends State<HomeBody> {
   @override
   Widget build(BuildContext context) {
+    List<NoteModel> unarchivedTasks = notes
+        .where(
+          (element) => element.archiveOrNot == false,
+        )
+        .toList();
     return Column(
       children: [
         AppBarLogin(photo: widget.photo, name: widget.name),
         Expanded(
-          child: notes.isEmpty
+          child: unarchivedTasks.isEmpty
               ? const Center(
                   child: Text("No Notes, Please Add Task"),
                 )
@@ -44,6 +50,19 @@ class _HomeBodyState extends State<HomeBody> {
                         padding: EdgeInsets.all(
                             MediaQuery.of(context).size.width * 0.02),
                         child: ListTile(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) {
+                                return TaskDetails(
+                                    noteModel: unarchivedTasks[index]);
+                              }),
+                            ).then(
+                              (value) {
+                                setState(() {});
+                              },
+                            );
+                          },
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
                                 MediaQuery.of(context).size.width * 0.04),
@@ -51,8 +70,8 @@ class _HomeBodyState extends State<HomeBody> {
                           trailing: ElevatedButton(
                             onPressed: () {
                               setState(() {
-                                notes[index].doneOrNot =
-                                    !notes[index].doneOrNot;
+                                unarchivedTasks[index].doneOrNot =
+                                    !unarchivedTasks[index].doneOrNot;
                               });
                             },
                             style: ElevatedButton.styleFrom(
@@ -65,7 +84,7 @@ class _HomeBodyState extends State<HomeBody> {
                                       MediaQuery.of(context).size.width * 0.005,
                                 ),
                               ),
-                              backgroundColor: notes[index].doneOrNot
+                              backgroundColor: unarchivedTasks[index].doneOrNot
                                   ? AppColors.mainColor
                                   : AppColors.white,
                             ),
@@ -74,7 +93,7 @@ class _HomeBodyState extends State<HomeBody> {
                               style: GoogleFonts.lexendDeca(
                                 textStyle: TextStyle(
                                   fontWeight: FontWeight.w700,
-                                  color: notes[index].doneOrNot
+                                  color: unarchivedTasks[index].doneOrNot
                                       ? AppColors.white
                                       : AppColors.mainColor,
                                   fontSize:
@@ -84,7 +103,7 @@ class _HomeBodyState extends State<HomeBody> {
                             ),
                           ),
                           title: Text(
-                            notes[index].title,
+                            unarchivedTasks[index].title,
                             style: GoogleFonts.lexendDeca(
                               fontWeight: FontWeight.w600,
                               color: AppColors.black,
@@ -93,7 +112,7 @@ class _HomeBodyState extends State<HomeBody> {
                             ),
                           ),
                           subtitle: Text(
-                            notes[index].time,
+                            unarchivedTasks[index].time,
                             style: GoogleFonts.lexendDeca(
                               fontWeight: FontWeight.w400,
                               color: AppColors.mainColor,
@@ -108,7 +127,7 @@ class _HomeBodyState extends State<HomeBody> {
                       ),
                     );
                   },
-                  itemCount: notes.length,
+                  itemCount: unarchivedTasks.length,
                 ),
         ),
       ],

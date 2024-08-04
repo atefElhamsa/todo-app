@@ -25,9 +25,13 @@ class _HomeScreenState extends State<HomeScreen> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context){
-                return AddNoteScreen(name: widget.name, image: widget.photo,);
+              MaterialPageRoute(builder: (context) {
+                return const AddNoteScreen();
               }),
+            ).then(
+              (value) {
+                setState(() {});
+              },
             );
           },
           backgroundColor: AppColors.mainColor,

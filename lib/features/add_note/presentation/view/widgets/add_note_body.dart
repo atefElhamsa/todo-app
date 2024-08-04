@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:todo/core/shared_widgets/custom_field.dart';
@@ -8,16 +6,13 @@ import 'package:todo/core/utils/app_images.dart';
 import 'package:todo/core/utils/app_texts.dart';
 import 'package:todo/features/home/data/model/note_model.dart';
 
-import '../../../../home/presentation/view/home_screen.dart';
-
 class AddNoteBody extends StatefulWidget {
-  const AddNoteBody({super.key, required this.name, required this.image});
-
-  final String name;
-  final File image;
+  const AddNoteBody({
+    super.key,
+  });
 
   @override
-  State<AddNoteBody> createState() => _AddNoteBodyState(this.name, this.image);
+  State<AddNoteBody> createState() => _AddNoteBodyState();
 }
 
 class _AddNoteBodyState extends State<AddNoteBody> {
@@ -30,10 +25,6 @@ class _AddNoteBodyState extends State<AddNoteBody> {
   DateTime? endDate;
   TimeOfDay? time;
 
-  String name;
-  File image;
-
-  _AddNoteBodyState(this.name, this.image);
   String convertDateString(DateTime date) {
     return date.toString().split(" ")[0];
   }
@@ -232,12 +223,7 @@ class _AddNoteBodyState extends State<AddNoteBody> {
                     endDate: convertDateString(endDate!),
                   ),
                 );
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context){
-                    return HomeScreen(photo: image, name: name);
-                  }),
-                );
+                Navigator.pop(context);
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(

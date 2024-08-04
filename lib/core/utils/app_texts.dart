@@ -12,9 +12,12 @@ class AppTexts {
   static const String camera = "Camera";
   static const String hello = "Hello!";
   static const String done = "Done";
+  static const String delete = "Delete";
   static const String doneTasks = "Done Tasks";
   static const String archivedTasks = "Archived Tasks";
   static const String addTask = "Add Task";
+  static const String yes = "Yes";
+  static const String cancel = "Cancel";
   static const String taskName = "Task Name";
   static const String enterTaskName = "Enter The Task Name";
   static const String description = "Description";
@@ -25,4 +28,8 @@ class AppTexts {
   static const String enterStartDate = "Enter The Start Date";
   static const String enterEndDate = "Enter The End Date";
   static const String setTimeForTask = "Set a Time For The Task";
+  static const String taskDetails = "Task Details";
+  static const String archive = "Archive";
+  static const String unarchive = "Unarchive";
+  static const String titleAlertDialog = "Are you sure you want to delete\nthis task?";
 }

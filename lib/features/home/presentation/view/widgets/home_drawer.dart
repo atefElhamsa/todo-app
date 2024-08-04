@@ -7,12 +7,17 @@ import 'package:todo/features/home/presentation/view/archived_tasks.dart';
 import 'package:todo/features/home/presentation/view/done_tasks.dart';
 import '../../../../../core/utils/app_colors.dart';
 
-class HomeDrawer extends StatelessWidget {
+class HomeDrawer extends StatefulWidget {
   const HomeDrawer({super.key, required this.name, required this.photo});
 
   final String name;
   final File photo;
 
+  @override
+  State<HomeDrawer> createState() => _HomeDrawerState();
+}
+
+class _HomeDrawerState extends State<HomeDrawer> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -37,7 +42,7 @@ class HomeDrawer extends StatelessWidget {
                     child: CircleAvatar(
                       radius: MediaQuery.of(context).size.width * 0.06,
                       backgroundImage: Image.file(
-                        photo,
+                        widget.photo,
                         fit: BoxFit.cover,
                       ).image,
                     ),
@@ -45,7 +50,7 @@ class HomeDrawer extends StatelessWidget {
                 ),
                 Expanded(
                   child: Text(
-                    name.trim(),
+                    widget.name.trim(),
                     style: GoogleFonts.lexendDeca(
                       textStyle: TextStyle(
                         fontWeight: FontWeight.w600,
@@ -71,6 +76,10 @@ class HomeDrawer extends StatelessWidget {
                   MaterialPageRoute(builder: (context) {
                     return const ArchivedTasks();
                   }),
+                ).then(
+                  (value) {
+                    setState(() {});
+                  },
                 );
               },
               shape: RoundedRectangleBorder(
