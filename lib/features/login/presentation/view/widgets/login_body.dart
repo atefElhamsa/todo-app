@@ -4,11 +4,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:todo/core/shared_widgets/custom_field.dart';
 import 'package:todo/core/utils/app_colors.dart';
 import 'package:todo/core/utils/app_images.dart';
 import 'package:todo/core/utils/app_texts.dart';
 import 'package:todo/features/home/presentation/view/home_screen.dart';
+
+import '../../controller/theme_controller.dart';
 
 class LoginBody extends StatefulWidget {
   const LoginBody({super.key});
@@ -46,81 +49,106 @@ class _LoginBodyState extends State<LoginBody> {
               GestureDetector(
                 onTap: () {
                   showModalBottomSheet(
-                      context: context,
-                      builder: (context) {
-                        return Padding(
-                          padding: EdgeInsets.all(
-                              MediaQuery.of(context).size.height * 0.03),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: GestureDetector(
-                                  onTap: () {
-                                    pickPhoto(ImageSource.gallery);
-                                  },
-                                  child: SizedBox(
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Icon(
-                                          Icons.photo_size_select_actual,
-                                          size: MediaQuery.of(context)
+                    context: context,
+                    backgroundColor:
+                        Provider.of<ThemeProvider>(context, listen: false)
+                                .switchValue
+                            ? AppColors.darkMode
+                            : AppColors.white,
+                    builder: (context) {
+                      return Padding(
+                        padding: EdgeInsets.all(
+                          MediaQuery.of(context).size.height * 0.03,
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  pickPhoto(ImageSource.gallery);
+                                },
+                                child: SizedBox(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(
+                                        Icons.photo_size_select_actual,
+                                        size:
+                                            MediaQuery.of(context).size.height *
+                                                0.05,
+                                        color: Provider.of<ThemeProvider>(
+                                                    context,
+                                                    listen: false)
+                                                .switchValue
+                                            ? AppColors.white
+                                            : AppColors.mainColor,
+                                      ),
+                                      Text(
+                                        AppTexts.gallery,
+                                        style: TextStyle(
+                                          fontSize: MediaQuery.of(context)
                                                   .size
                                                   .height *
-                                              0.05,
-                                          color: AppColors.mainColor,
+                                              0.02,
+                                          color: Provider.of<ThemeProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .switchValue
+                                              ? AppColors.white
+                                              : AppColors.grey1,
                                         ),
-                                        Text(
-                                          AppTexts.gallery,
-                                          style: TextStyle(
-                                            fontSize: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.02,
-                                            color: AppColors.grey1,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
-                              Expanded(
-                                child: GestureDetector(
-                                  onTap: () {
-                                    pickPhoto(ImageSource.camera);
-                                  },
-                                  child: SizedBox(
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Icon(
-                                          Icons.add_a_photo,
-                                          size: MediaQuery.of(context)
+                            ),
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  pickPhoto(ImageSource.camera);
+                                },
+                                child: SizedBox(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(
+                                        Icons.add_a_photo,
+                                        size:
+                                            MediaQuery.of(context).size.height *
+                                                0.05,
+                                        color: Provider.of<ThemeProvider>(
+                                                    context,
+                                                    listen: false)
+                                                .switchValue
+                                            ? AppColors.white
+                                            : AppColors.mainColor,
+                                      ),
+                                      Text(
+                                        AppTexts.camera,
+                                        style: TextStyle(
+                                          fontSize: MediaQuery.of(context)
                                                   .size
                                                   .height *
-                                              0.05,
-                                          color: AppColors.mainColor,
+                                              0.02,
+                                          color: Provider.of<ThemeProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .switchValue
+                                              ? AppColors.white
+                                              : AppColors.grey1,
                                         ),
-                                        Text(
-                                          AppTexts.camera,
-                                          style: TextStyle(
-                                            fontSize: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.02,
-                                            color: AppColors.grey1,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
-                            ],
-                          ),
-                        );
-                      });
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
                 },
                 child: Container(
                   height: MediaQuery.of(context).size.height * 0.15,
@@ -128,12 +156,21 @@ class _LoginBodyState extends State<LoginBody> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(
                         MediaQuery.of(context).size.width * 0.03),
-                    border: Border.all(color: AppColors.labni2),
+                    border: Border.all(
+                      color: Provider.of<ThemeProvider>(context, listen: false)
+                              .switchValue
+                          ? AppColors.white.withOpacity(0.5)
+                          : AppColors.labni2,
+                    ),
                   ),
                   child: image == null
                       ? Icon(
                           Icons.add_a_photo,
-                          color: AppColors.mainColor,
+                          color:
+                              Provider.of<ThemeProvider>(context, listen: false)
+                                      .switchValue
+                                  ? AppColors.white
+                                  : AppColors.mainColor,
                           size: MediaQuery.of(context).size.height * 0.05,
                         )
                       : ClipRRect(
@@ -157,6 +194,11 @@ class _LoginBodyState extends State<LoginBody> {
             onPressed: () {
               showModalBottomSheet(
                   context: context,
+                  backgroundColor:
+                      Provider.of<ThemeProvider>(context, listen: false)
+                              .switchValue
+                          ? AppColors.darkMode
+                          : AppColors.white,
                   builder: (context) {
                     return Padding(
                       padding: EdgeInsets.all(
@@ -176,7 +218,11 @@ class _LoginBodyState extends State<LoginBody> {
                                       Icons.photo_size_select_actual,
                                       size: MediaQuery.of(context).size.height *
                                           0.05,
-                                      color: AppColors.mainColor,
+                                      color: Provider.of<ThemeProvider>(context,
+                                                  listen: false)
+                                              .switchValue
+                                          ? AppColors.white
+                                          : AppColors.mainColor,
                                     ),
                                     Text(
                                       AppTexts.gallery,
@@ -184,7 +230,12 @@ class _LoginBodyState extends State<LoginBody> {
                                         fontSize:
                                             MediaQuery.of(context).size.height *
                                                 0.02,
-                                        color: AppColors.grey1,
+                                        color: Provider.of<ThemeProvider>(
+                                                    context,
+                                                    listen: false)
+                                                .switchValue
+                                            ? AppColors.white
+                                            : AppColors.grey1,
                                       ),
                                     ),
                                   ],
@@ -205,7 +256,11 @@ class _LoginBodyState extends State<LoginBody> {
                                       Icons.add_a_photo,
                                       size: MediaQuery.of(context).size.height *
                                           0.05,
-                                      color: AppColors.mainColor,
+                                      color: Provider.of<ThemeProvider>(context,
+                                                  listen: false)
+                                              .switchValue
+                                          ? AppColors.white
+                                          : AppColors.mainColor,
                                     ),
                                     Text(
                                       AppTexts.camera,
@@ -213,7 +268,12 @@ class _LoginBodyState extends State<LoginBody> {
                                         fontSize:
                                             MediaQuery.of(context).size.height *
                                                 0.02,
-                                        color: AppColors.grey1,
+                                        color: Provider.of<ThemeProvider>(
+                                                    context,
+                                                    listen: false)
+                                                .switchValue
+                                            ? AppColors.white
+                                            : AppColors.grey1,
                                       ),
                                     ),
                                   ],
@@ -231,7 +291,10 @@ class _LoginBodyState extends State<LoginBody> {
               style: GoogleFonts.lexendDeca(
                 textStyle: TextStyle(
                   fontWeight: FontWeight.w400,
-                  color: AppColors.grey2,
+                  color: Provider.of<ThemeProvider>(context, listen: false)
+                          .switchValue
+                      ? AppColors.white
+                      : AppColors.grey2,
                   fontSize: MediaQuery.of(context).size.height * 0.02,
                 ),
               ),
@@ -245,7 +308,10 @@ class _LoginBodyState extends State<LoginBody> {
             controller: name,
             title: AppTexts.yourName,
             subTitle: AppTexts.enterYourName,
-            borderColor: AppColors.labni2,
+            borderColor:
+                Provider.of<ThemeProvider>(context, listen: false).switchValue
+                    ? AppColors.white.withOpacity(0.5)
+                    : AppColors.labni2,
           ),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.08,
@@ -262,6 +328,11 @@ class _LoginBodyState extends State<LoginBody> {
                   if (image == null) {
                     showModalBottomSheet(
                         context: context,
+                        backgroundColor:
+                            Provider.of<ThemeProvider>(context, listen: false)
+                                    .switchValue
+                                ? AppColors.darkMode
+                                : AppColors.white,
                         builder: (context) {
                           return Padding(
                             padding: EdgeInsets.all(
@@ -283,7 +354,12 @@ class _LoginBodyState extends State<LoginBody> {
                                                     .size
                                                     .height *
                                                 0.05,
-                                            color: AppColors.mainColor,
+                                            color: Provider.of<ThemeProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .switchValue
+                                                ? AppColors.white
+                                                : AppColors.mainColor,
                                           ),
                                           Text(
                                             AppTexts.gallery,
@@ -292,7 +368,12 @@ class _LoginBodyState extends State<LoginBody> {
                                                       .size
                                                       .height *
                                                   0.02,
-                                              color: AppColors.grey1,
+                                              color: Provider.of<ThemeProvider>(
+                                                          context,
+                                                          listen: false)
+                                                      .switchValue
+                                                  ? AppColors.white
+                                                  : AppColors.grey1,
                                             ),
                                           ),
                                         ],
@@ -315,7 +396,12 @@ class _LoginBodyState extends State<LoginBody> {
                                                     .size
                                                     .height *
                                                 0.05,
-                                            color: AppColors.mainColor,
+                                            color: Provider.of<ThemeProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .switchValue
+                                                ? AppColors.white
+                                                : AppColors.mainColor,
                                           ),
                                           Text(
                                             AppTexts.camera,
@@ -324,7 +410,12 @@ class _LoginBodyState extends State<LoginBody> {
                                                       .size
                                                       .height *
                                                   0.02,
-                                              color: AppColors.grey1,
+                                              color: Provider.of<ThemeProvider>(
+                                                          context,
+                                                          listen: false)
+                                                      .switchValue
+                                                  ? AppColors.white
+                                                  : AppColors.grey1,
                                             ),
                                           ),
                                         ],
@@ -349,7 +440,9 @@ class _LoginBodyState extends State<LoginBody> {
                   }
                 }
               },
-              color: AppColors.mainColor,
+              color: Provider.of<ThemeProvider>(context).switchValue
+                  ? AppColors.materialButton
+                  : AppColors.mainColor,
               height: MediaQuery.of(context).size.height * 0.06,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(
@@ -361,13 +454,12 @@ class _LoginBodyState extends State<LoginBody> {
                     child: Text(
                       AppTexts.getStarted,
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.lexendDeca(
-                        textStyle: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.white,
-                          fontSize: MediaQuery.of(context).size.height * 0.025,
-                        ),
-                      ),
+                      style: Theme.of(context).textTheme.displayMedium!.merge(
+                            TextStyle(
+                              fontSize:
+                                  MediaQuery.of(context).size.height * 0.025,
+                            ),
+                          ),
                     ),
                   ),
                 ],

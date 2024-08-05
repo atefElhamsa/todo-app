@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todo/core/utils/theme.dart';
 import 'package:todo/features/onboarding/presentation/view/onboarding_screen.dart';
 
+import 'features/login/presentation/controller/theme_controller.dart';
+
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => ThemeProvider(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -10,9 +19,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+      theme: AppTheme().lightThemeData,
+      themeMode: Provider.of<ThemeProvider>(context).switchValue ? ThemeMode.dark : ThemeMode.light,
+      darkTheme: AppTheme().darkThemeData,
       debugShowCheckedModeBanner: false,
-      home: OnBoardingScreen(),
+      home: const OnBoardingScreen(),
     );
   }
 }

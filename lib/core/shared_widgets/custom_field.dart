@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import '../../features/login/presentation/controller/theme_controller.dart';
 import '../utils/app_colors.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -29,7 +31,9 @@ class CustomTextField extends StatelessWidget {
           horizontal: MediaQuery.of(context).size.width * 0.04),
       child: Container(
         decoration: BoxDecoration(
-          color: AppColors.white,
+          color: Provider.of<ThemeProvider>(context, listen: false).switchValue
+              ? AppColors.textField
+              : AppColors.white,
           borderRadius:
               BorderRadius.circular(MediaQuery.of(context).size.width * 0.03),
           border: Border.all(color: borderColor),
@@ -45,7 +49,10 @@ class CustomTextField extends StatelessWidget {
                 style: GoogleFonts.lexendDeca(
                   textStyle: TextStyle(
                     fontWeight: FontWeight.w400,
-                    color: AppColors.black.withOpacity(0.7),
+                    color: Provider.of<ThemeProvider>(context, listen: false)
+                            .switchValue
+                        ? AppColors.white.withOpacity(0.8)
+                        : AppColors.black.withOpacity(0.7),
                     fontSize: MediaQuery.of(context).size.height * 0.025,
                   ),
                 ),
@@ -53,6 +60,11 @@ class CustomTextField extends StatelessWidget {
               Form(
                 key: nameFromKey,
                 child: TextFormField(
+                  style: Theme.of(context).textTheme.displaySmall!.merge(
+                        TextStyle(
+                          fontSize: MediaQuery.of(context).size.height * 0.02,
+                        ),
+                      ),
                   onTapOutside: (event) {
                     FocusManager.instance.primaryFocus?.unfocus();
                   },
@@ -73,7 +85,12 @@ class CustomTextField extends StatelessWidget {
                   decoration: InputDecoration(
                     hintText: subTitle,
                     hintStyle: TextStyle(
-                        fontSize: MediaQuery.of(context).size.height * 0.02),
+                        fontSize: MediaQuery.of(context).size.height * 0.02,
+                        color:
+                            Provider.of<ThemeProvider>(context, listen: false)
+                                    .switchValue
+                                ? AppColors.white.withOpacity(0.4)
+                                : AppColors.grey1),
                     enabledBorder: InputBorder.none,
                     focusedBorder: InputBorder.none,
                     errorBorder: InputBorder.none,

@@ -31,5 +31,7 @@ class AppTexts {
   static const String taskDetails = "Task Details";
   static const String archive = "Archive";
   static const String unarchive = "Unarchive";
+  static const String lightMode = "Light Mode";
+  static const String darkMode = "Dark Mode";
   static const String titleAlertDialog = "Are you sure you want to delete\nthis task?";
 }

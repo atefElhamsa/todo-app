@@ -39,7 +39,7 @@ class _ArchivedTasksState extends State<ArchivedTasks> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context){
+                        MaterialPageRoute(builder: (context) {
                           return TaskDetails(noteModel: archivedList[index]);
                         }),
                       );
