@@ -34,4 +34,6 @@ class AppTexts {
   static const String lightMode = "Light Mode";
   static const String darkMode = "Dark Mode";
   static const String titleAlertDialog = "Are you sure you want to delete\nthis task?";
+  static const String settingsBox = "settingsBox";
+  static const String switchValue = "switchValue";
 }

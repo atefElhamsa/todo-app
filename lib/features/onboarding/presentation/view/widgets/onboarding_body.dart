@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/core/utils/app_colors.dart';
 import 'package:todo/core/utils/app_images.dart';
@@ -39,7 +40,7 @@ class _OnBoardingBodyState extends State<OnBoardingBody> {
                 ),
               ),
               Switch(
-                value: Provider.of<ThemeProvider>(context).switchValue,
+                value: Hive.box(AppTexts.settingsBox).get(AppTexts.switchValue),
                 onChanged: (value) {
                   Provider.of<ThemeProvider>(context, listen: false)
                       .changeSwitchValue(value);
