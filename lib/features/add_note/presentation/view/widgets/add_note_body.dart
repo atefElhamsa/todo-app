@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:todo/core/shared_widgets/custom_field.dart';
 import 'package:todo/core/utils/app_colors.dart';
 import 'package:todo/core/utils/app_images.dart';
 import 'package:todo/core/utils/app_texts.dart';
-import 'package:todo/features/home/data/model/note_model.dart';
+
+import '../../../../home/presentation/controller/home_controller.dart';
+import '../../../../login/presentation/controller/theme_controller.dart';
 
 class AddNoteBody extends StatefulWidget {
   const AddNoteBody({
@@ -20,14 +23,6 @@ class _AddNoteBodyState extends State<AddNoteBody> {
   var nameFromKeyTask = GlobalKey<FormState>();
   TextEditingController descriptionName = TextEditingController();
   var nameFromKeyDescription = GlobalKey<FormState>();
-  DateTime dateTimeNow = DateTime.now();
-  DateTime? startDate;
-  DateTime? endDate;
-  TimeOfDay? time;
-
-  String convertDateString(DateTime date) {
-    return date.toString().split(" ")[0];
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +36,10 @@ class _AddNoteBodyState extends State<AddNoteBody> {
           nameFromKey: nameFromKeyTask,
           title: AppTexts.taskName,
           subTitle: AppTexts.enterTaskName,
-          borderColor: AppColors.white,
+          borderColor:
+              Provider.of<ThemeProvider>(context, listen: false).switchValue
+                  ? AppColors.transparent
+                  : AppColors.labni2,
         ),
         SizedBox(
           height: MediaQuery.of(context).size.height * 0.02,
@@ -51,7 +49,10 @@ class _AddNoteBodyState extends State<AddNoteBody> {
           nameFromKey: nameFromKeyDescription,
           title: AppTexts.description,
           subTitle: AppTexts.enterTaskDescription,
-          borderColor: AppColors.white,
+          borderColor:
+              Provider.of<ThemeProvider>(context, listen: false).switchValue
+                  ? AppColors.transparent
+                  : AppColors.labni2,
           minLines: 5,
           maxLines: 7,
         ),
@@ -65,39 +66,49 @@ class _AddNoteBodyState extends State<AddNoteBody> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(
                     MediaQuery.of(context).size.width * 0.03)),
-            tileColor: AppColors.white,
+            tileColor: Provider.of<ThemeProvider>(context).switchValue
+                ? AppColors.textField
+                : AppColors.white,
             title: Text(
               AppTexts.startDate,
               style: GoogleFonts.lexendDeca(
                 textStyle: TextStyle(
                   fontWeight: FontWeight.w400,
-                  color: AppColors.black,
+                  color: Provider.of<ThemeProvider>(context, listen: false)
+                          .switchValue
+                      ? AppColors.white
+                      : AppColors.black,
                   fontSize: MediaQuery.of(context).size.height * 0.023,
                 ),
               ),
             ),
             leading: Image.asset(AppImages.calendar),
             trailing: GestureDetector(
-              onTap: () async {
-                startDate = await showDatePicker(
-                  context: context,
-                  firstDate: dateTimeNow,
-                  lastDate: dateTimeNow.add(
-                    const Duration(days: 31),
-                  ),
-                );
-                setState(() {});
+              onTap: () {
+                Provider.of<HomeProvider>(context, listen: false)
+                    .selectStartDate(context);
               },
-              child: Image.asset(AppImages.arrowDown),
+              child: Image.asset(
+                AppImages.arrowDown,
+                color: Provider.of<ThemeProvider>(context, listen: false)
+                        .switchValue
+                    ? AppColors.white
+                    : AppColors.black,
+              ),
             ),
             subtitle: Text(
-              startDate == null
+              Provider.of<HomeProvider>(context).startDate == null
                   ? AppTexts.enterStartDate
-                  : convertDateString(startDate!),
+                  : Provider.of<HomeProvider>(context, listen: false)
+                      .convertDateString(
+                          Provider.of<HomeProvider>(context).startDate!),
               style: GoogleFonts.lexendDeca(
                 textStyle: TextStyle(
                   fontWeight: FontWeight.w400,
-                  color: AppColors.grey1,
+                  color: Provider.of<ThemeProvider>(context, listen: false)
+                          .switchValue
+                      ? AppColors.white.withOpacity(0.7)
+                      : AppColors.grey1,
                   fontSize: MediaQuery.of(context).size.height * 0.016,
                 ),
               ),
@@ -116,39 +127,49 @@ class _AddNoteBodyState extends State<AddNoteBody> {
                 MediaQuery.of(context).size.width * 0.03,
               ),
             ),
-            tileColor: AppColors.white,
+            tileColor: Provider.of<ThemeProvider>(context).switchValue
+                ? AppColors.textField
+                : AppColors.white,
             title: Text(
               AppTexts.endDate,
               style: GoogleFonts.lexendDeca(
                 textStyle: TextStyle(
                   fontWeight: FontWeight.w400,
-                  color: AppColors.black,
+                  color: Provider.of<ThemeProvider>(context, listen: false)
+                          .switchValue
+                      ? AppColors.white
+                      : AppColors.black,
                   fontSize: MediaQuery.of(context).size.height * 0.023,
                 ),
               ),
             ),
             leading: Image.asset(AppImages.calendar),
             trailing: GestureDetector(
-              onTap: () async {
-                endDate = await showDatePicker(
-                  context: context,
-                  firstDate: dateTimeNow,
-                  lastDate: dateTimeNow.add(
-                    const Duration(days: 365),
-                  ),
-                );
-                setState(() {});
+              onTap: () {
+                Provider.of<HomeProvider>(context, listen: false)
+                    .selectEndDate(context);
               },
-              child: Image.asset(AppImages.arrowDown),
+              child: Image.asset(
+                AppImages.arrowDown,
+                color: Provider.of<ThemeProvider>(context, listen: false)
+                        .switchValue
+                    ? AppColors.white
+                    : AppColors.black,
+              ),
             ),
             subtitle: Text(
-              endDate == null
+              Provider.of<HomeProvider>(context).endDate == null
                   ? AppTexts.enterEndDate
-                  : convertDateString(endDate!),
+                  : Provider.of<HomeProvider>(context, listen: false)
+                      .convertDateString(
+                          Provider.of<HomeProvider>(context).endDate!),
               style: GoogleFonts.lexendDeca(
                 textStyle: TextStyle(
                   fontWeight: FontWeight.w400,
-                  color: AppColors.grey1,
+                  color: Provider.of<ThemeProvider>(context, listen: false)
+                          .switchValue
+                      ? AppColors.white.withOpacity(0.7)
+                      : AppColors.grey1,
                   fontSize: MediaQuery.of(context).size.height * 0.016,
                 ),
               ),
@@ -167,34 +188,47 @@ class _AddNoteBodyState extends State<AddNoteBody> {
                 MediaQuery.of(context).size.width * 0.03,
               ),
             ),
-            tileColor: AppColors.white,
+            tileColor: Provider.of<ThemeProvider>(context).switchValue
+                ? AppColors.textField
+                : AppColors.white,
             title: Text(
               AppTexts.addTime,
               style: GoogleFonts.lexendDeca(
                 textStyle: TextStyle(
                   fontWeight: FontWeight.w400,
-                  color: AppColors.black,
+                  color: Provider.of<ThemeProvider>(context, listen: false)
+                          .switchValue
+                      ? AppColors.white
+                      : AppColors.black,
                   fontSize: MediaQuery.of(context).size.height * 0.023,
                 ),
               ),
             ),
             leading: Image.asset(AppImages.watch),
             trailing: GestureDetector(
-              onTap: () async {
-                time = await showTimePicker(
-                  context: context,
-                  initialTime: TimeOfDay.now(),
-                );
-                setState(() {});
+              onTap: () {
+                Provider.of<HomeProvider>(context, listen: false)
+                    .selectTime(context);
               },
-              child: Image.asset(AppImages.arrowDown),
+              child: Image.asset(
+                AppImages.arrowDown,
+                color: Provider.of<ThemeProvider>(context, listen: false)
+                        .switchValue
+                    ? AppColors.white
+                    : AppColors.black,
+              ),
             ),
             subtitle: Text(
-              time == null ? AppTexts.setTimeForTask : time!.format(context),
+              Provider.of<HomeProvider>(context).time == null
+                  ? AppTexts.setTimeForTask
+                  : Provider.of<HomeProvider>(context).time!.format(context),
               style: GoogleFonts.lexendDeca(
                 textStyle: TextStyle(
                   fontWeight: FontWeight.w400,
-                  color: AppColors.grey1,
+                  color: Provider.of<ThemeProvider>(context, listen: false)
+                          .switchValue
+                      ? AppColors.white.withOpacity(0.7)
+                      : AppColors.grey1,
                   fontSize: MediaQuery.of(context).size.height * 0.016,
                 ),
               ),
@@ -209,30 +243,17 @@ class _AddNoteBodyState extends State<AddNoteBody> {
               horizontal: MediaQuery.of(context).size.width * 0.04),
           child: MaterialButton(
             onPressed: () {
-              if (time != null &&
-                  startDate != null &&
-                  endDate != null &&
-                  taskName.text.isNotEmpty &&
-                  descriptionName.text.isNotEmpty) {
-                notes.add(
-                  NoteModel(
-                    title: taskName.text.trim(),
-                    description: descriptionName.text.trim(),
-                    time: time!.format(context),
-                    startDate: convertDateString(startDate!),
-                    endDate: convertDateString(endDate!),
-                  ),
-                );
-                Navigator.pop(context);
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("Fill Data"),
-                  ),
+              if (taskName.text.isNotEmpty && descriptionName.text.isNotEmpty) {
+                Provider.of<HomeProvider>(context, listen: false).addNote(
+                  title: taskName.text.trim(),
+                  description: descriptionName.text.trim(),
+                  context: context,
                 );
               }
             },
-            color: AppColors.mainColor,
+            color: Provider.of<ThemeProvider>(context).switchValue
+                ? AppColors.materialButton
+                : AppColors.mainColor,
             height: MediaQuery.of(context).size.height * 0.06,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(
@@ -244,13 +265,12 @@ class _AddNoteBodyState extends State<AddNoteBody> {
                   child: Text(
                     AppTexts.addTask,
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.lexendDeca(
-                      textStyle: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.white,
-                        fontSize: MediaQuery.of(context).size.height * 0.025,
-                      ),
-                    ),
+                    style: Theme.of(context).textTheme.displayMedium!.merge(
+                          TextStyle(
+                            fontSize:
+                                MediaQuery.of(context).size.height * 0.025,
+                          ),
+                        ),
                   ),
                 ),
               ],

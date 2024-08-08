@@ -1,10 +1,12 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:todo/core/utils/app_images.dart';
 import 'package:todo/core/utils/app_texts.dart';
 import 'package:todo/features/home/presentation/view/archived_tasks.dart';
 import 'package:todo/features/home/presentation/view/done_tasks.dart';
+import 'package:todo/features/login/presentation/controller/theme_controller.dart';
 import '../../../../../core/utils/app_colors.dart';
 
 class HomeDrawer extends StatefulWidget {
@@ -21,6 +23,9 @@ class _HomeDrawerState extends State<HomeDrawer> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      backgroundColor: Provider.of<ThemeProvider>(context).switchValue
+          ? AppColors.darkMode
+          : AppColors.white,
       width: MediaQuery.of(context).size.width * 0.7,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -31,14 +36,19 @@ class _HomeDrawerState extends State<HomeDrawer> {
       child: Column(
         children: [
           Container(
-            padding: EdgeInsets.all(MediaQuery.of(context).size.height * 0.022),
-            color: AppColors.mainColor,
+            padding: EdgeInsets.all(MediaQuery.of(context).size.height * 0.023),
+            color: Provider.of<ThemeProvider>(context).switchValue
+                ? AppColors.homeAppBar
+                : AppColors.mainColor,
             child: Row(
               children: [
                 Expanded(
                   child: CircleAvatar(
                     radius: MediaQuery.of(context).size.width * 0.065,
-                    backgroundColor: AppColors.white,
+                    backgroundColor:
+                        Provider.of<ThemeProvider>(context).switchValue
+                            ? AppColors.transparent
+                            : AppColors.white,
                     child: CircleAvatar(
                       radius: MediaQuery.of(context).size.width * 0.06,
                       backgroundImage: Image.file(
@@ -96,12 +106,19 @@ class _HomeDrawerState extends State<HomeDrawer> {
                 style: GoogleFonts.lexendDeca(
                   textStyle: TextStyle(
                     fontWeight: FontWeight.w600,
-                    color: AppColors.archivedAndDone,
+                    color: Provider.of<ThemeProvider>(context).switchValue
+                        ? AppColors.white
+                        : AppColors.archivedAndDone,
                     fontSize: MediaQuery.of(context).size.height * 0.025,
                   ),
                 ),
               ),
-              leading: Image.asset(AppImages.archeviedTasks),
+              leading: Image.asset(
+                AppImages.archeviedTasks,
+                color: Provider.of<ThemeProvider>(context).switchValue
+                    ? AppColors.white
+                    : AppColors.archivedAndDone,
+              ),
             ),
           ),
           SizedBox(
@@ -133,12 +150,19 @@ class _HomeDrawerState extends State<HomeDrawer> {
                 style: GoogleFonts.lexendDeca(
                   textStyle: TextStyle(
                     fontWeight: FontWeight.w600,
-                    color: AppColors.archivedAndDone,
+                    color: Provider.of<ThemeProvider>(context).switchValue
+                        ? AppColors.white
+                        : AppColors.archivedAndDone,
                     fontSize: MediaQuery.of(context).size.height * 0.025,
                   ),
                 ),
               ),
-              leading: Image.asset(AppImages.doneTasks),
+              leading: Image.asset(
+                AppImages.doneTasks,
+                color: Provider.of<ThemeProvider>(context).switchValue
+                    ? AppColors.white
+                    : AppColors.archivedAndDone,
+              ),
             ),
           ),
         ],

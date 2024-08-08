@@ -1,12 +1,16 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:todo/core/utils/app_colors.dart';
 import 'package:todo/core/utils/app_images.dart';
 import 'package:todo/core/utils/app_texts.dart';
 import 'package:todo/features/home/data/model/note_model.dart';
+import 'package:todo/features/home/presentation/controller/home_controller.dart';
 import 'package:todo/features/home/presentation/view/task_details.dart';
 import 'package:todo/features/login/presentation/view/widgets/appbar.dart';
+
+import '../../../../login/presentation/controller/theme_controller.dart';
 
 class HomeBody extends StatefulWidget {
   const HomeBody({super.key, required this.photo, required this.name});
@@ -21,7 +25,8 @@ class HomeBody extends StatefulWidget {
 class _HomeBodyState extends State<HomeBody> {
   @override
   Widget build(BuildContext context) {
-    List<NoteModel> unarchivedTasks = notes
+    List<NoteModel> unarchivedTasks = Provider.of<HomeProvider>(context)
+        .notes
         .where(
           (element) => element.archiveOrNot == false,
         )
@@ -31,10 +36,21 @@ class _HomeBodyState extends State<HomeBody> {
         AppBarLogin(photo: widget.photo, name: widget.name),
         Expanded(
           child: unarchivedTasks.isEmpty
-              ? const Center(
-                  child: Text("No Notes, Please Add Task"),
+              ? Center(
+                  child: Text(
+                    "No Notes, Please Add Task",
+                    style: Theme.of(context).textTheme.displaySmall!.merge(
+                          TextStyle(
+                            fontSize: MediaQuery.of(context).size.height * 0.03,
+                          ),
+                        ),
+                  ),
                 )
               : ListView.builder(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: MediaQuery.of(context).size.width * 0.01,
+                    vertical: MediaQuery.of(context).size.height * 0.01,
+                  ),
                   physics: const BouncingScrollPhysics(),
                   itemBuilder: (context, index) {
                     return Dismissible(
@@ -63,6 +79,10 @@ class _HomeBodyState extends State<HomeBody> {
                               },
                             );
                           },
+                          tileColor:
+                              Provider.of<ThemeProvider>(context).switchValue
+                                  ? AppColors.textField
+                                  : AppColors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
                                 MediaQuery.of(context).size.width * 0.04),
@@ -86,7 +106,10 @@ class _HomeBodyState extends State<HomeBody> {
                               ),
                               backgroundColor: unarchivedTasks[index].doneOrNot
                                   ? AppColors.mainColor
-                                  : AppColors.white,
+                                  : Provider.of<ThemeProvider>(context)
+                                          .switchValue
+                                      ? AppColors.textField
+                                      : AppColors.white,
                             ),
                             child: Text(
                               AppTexts.done,
@@ -94,8 +117,14 @@ class _HomeBodyState extends State<HomeBody> {
                                 textStyle: TextStyle(
                                   fontWeight: FontWeight.w700,
                                   color: unarchivedTasks[index].doneOrNot
-                                      ? AppColors.white
-                                      : AppColors.mainColor,
+                                      ? Provider.of<ThemeProvider>(context)
+                                              .switchValue
+                                          ? AppColors.black
+                                          : AppColors.white
+                                      : Provider.of<ThemeProvider>(context)
+                                              .switchValue
+                                          ? AppColors.white
+                                          : AppColors.mainColor,
                                   fontSize:
                                       MediaQuery.of(context).size.height * 0.02,
                                 ),
@@ -106,7 +135,10 @@ class _HomeBodyState extends State<HomeBody> {
                             unarchivedTasks[index].title,
                             style: GoogleFonts.lexendDeca(
                               fontWeight: FontWeight.w600,
-                              color: AppColors.black,
+                              color: Provider.of<ThemeProvider>(context)
+                                      .switchValue
+                                  ? AppColors.white
+                                  : AppColors.black,
                               fontSize:
                                   MediaQuery.of(context).size.height * 0.023,
                             ),

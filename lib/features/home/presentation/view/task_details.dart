@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:todo/features/home/data/model/note_model.dart';
 import '../../../../core/shared_widgets/custom_appbar.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_images.dart';
 import '../../../../core/utils/app_texts.dart';
+import '../../../login/presentation/controller/theme_controller.dart';
+import '../controller/home_controller.dart';
 
 class TaskDetails extends StatefulWidget {
   const TaskDetails({
@@ -28,6 +31,7 @@ class _TaskDetailsState extends State<TaskDetails> {
         child: const CustomAppBar(title: AppTexts.taskDetails),
       ),
       body: ListView(
+        physics: const BouncingScrollPhysics(),
         children: [
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.03,
@@ -37,10 +41,16 @@ class _TaskDetailsState extends State<TaskDetails> {
                 horizontal: MediaQuery.of(context).size.width * 0.04),
             child: Container(
               decoration: BoxDecoration(
-                color: AppColors.white,
+                color: Provider.of<ThemeProvider>(context).switchValue
+                    ? AppColors.textField
+                    : AppColors.white,
                 borderRadius: BorderRadius.circular(
                     MediaQuery.of(context).size.width * 0.03),
-                border: Border.all(color: AppColors.white),
+                border: Border.all(
+                  color: Provider.of<ThemeProvider>(context).switchValue
+                      ? AppColors.transparent
+                      : AppColors.labni2,
+                ),
               ),
               child: Padding(
                 padding: EdgeInsets.symmetric(
@@ -53,7 +63,9 @@ class _TaskDetailsState extends State<TaskDetails> {
                       style: GoogleFonts.lexendDeca(
                         textStyle: TextStyle(
                           fontWeight: FontWeight.w400,
-                          color: AppColors.black.withOpacity(0.7),
+                          color: Provider.of<ThemeProvider>(context).switchValue
+                              ? AppColors.white
+                              : AppColors.black.withOpacity(0.7),
                           fontSize: MediaQuery.of(context).size.height * 0.025,
                         ),
                       ),
@@ -63,8 +75,11 @@ class _TaskDetailsState extends State<TaskDetails> {
                       decoration: InputDecoration(
                         hintText: widget.noteModel.title,
                         hintStyle: TextStyle(
-                            fontSize:
-                                MediaQuery.of(context).size.height * 0.025),
+                          fontSize: MediaQuery.of(context).size.height * 0.025,
+                          color: Provider.of<ThemeProvider>(context).switchValue
+                              ? AppColors.white.withOpacity(0.7)
+                              : AppColors.grey1,
+                        ),
                         enabledBorder: InputBorder.none,
                         focusedBorder: InputBorder.none,
                         errorBorder: InputBorder.none,
@@ -84,10 +99,16 @@ class _TaskDetailsState extends State<TaskDetails> {
                 horizontal: MediaQuery.of(context).size.width * 0.04),
             child: Container(
               decoration: BoxDecoration(
-                color: AppColors.white,
+                color: Provider.of<ThemeProvider>(context).switchValue
+                    ? AppColors.textField
+                    : AppColors.white,
                 borderRadius: BorderRadius.circular(
                     MediaQuery.of(context).size.width * 0.03),
-                border: Border.all(color: AppColors.white),
+                border: Border.all(
+                  color: Provider.of<ThemeProvider>(context).switchValue
+                      ? AppColors.transparent
+                      : AppColors.labni2,
+                ),
               ),
               child: Padding(
                 padding: EdgeInsets.symmetric(
@@ -100,7 +121,9 @@ class _TaskDetailsState extends State<TaskDetails> {
                       style: GoogleFonts.lexendDeca(
                         textStyle: TextStyle(
                           fontWeight: FontWeight.w400,
-                          color: AppColors.black.withOpacity(0.7),
+                          color: Provider.of<ThemeProvider>(context).switchValue
+                              ? AppColors.white
+                              : AppColors.black.withOpacity(0.7),
                           fontSize: MediaQuery.of(context).size.height * 0.025,
                         ),
                       ),
@@ -112,8 +135,11 @@ class _TaskDetailsState extends State<TaskDetails> {
                       decoration: InputDecoration(
                         hintText: widget.noteModel.description,
                         hintStyle: TextStyle(
-                            fontSize:
-                                MediaQuery.of(context).size.height * 0.025),
+                          fontSize: MediaQuery.of(context).size.height * 0.025,
+                          color: Provider.of<ThemeProvider>(context).switchValue
+                              ? AppColors.white.withOpacity(0.7)
+                              : AppColors.grey1,
+                        ),
                         enabledBorder: InputBorder.none,
                         focusedBorder: InputBorder.none,
                         errorBorder: InputBorder.none,
@@ -135,13 +161,17 @@ class _TaskDetailsState extends State<TaskDetails> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(
                       MediaQuery.of(context).size.width * 0.03)),
-              tileColor: AppColors.white,
+              tileColor: Provider.of<ThemeProvider>(context).switchValue
+                  ? AppColors.textField
+                  : AppColors.white,
               title: Text(
                 AppTexts.startDate,
                 style: GoogleFonts.lexendDeca(
                   textStyle: TextStyle(
                     fontWeight: FontWeight.w400,
-                    color: AppColors.black,
+                    color: Provider.of<ThemeProvider>(context).switchValue
+                        ? AppColors.white
+                        : AppColors.black,
                     fontSize: MediaQuery.of(context).size.height * 0.023,
                   ),
                 ),
@@ -152,7 +182,9 @@ class _TaskDetailsState extends State<TaskDetails> {
                 style: GoogleFonts.lexendDeca(
                   textStyle: TextStyle(
                     fontWeight: FontWeight.w400,
-                    color: AppColors.grey1,
+                    color: Provider.of<ThemeProvider>(context).switchValue
+                        ? AppColors.white.withOpacity(0.7)
+                        : AppColors.grey1,
                     fontSize: MediaQuery.of(context).size.height * 0.016,
                   ),
                 ),
@@ -171,13 +203,17 @@ class _TaskDetailsState extends State<TaskDetails> {
                   MediaQuery.of(context).size.width * 0.03,
                 ),
               ),
-              tileColor: AppColors.white,
+              tileColor: Provider.of<ThemeProvider>(context).switchValue
+                  ? AppColors.textField
+                  : AppColors.white,
               title: Text(
                 AppTexts.endDate,
                 style: GoogleFonts.lexendDeca(
                   textStyle: TextStyle(
                     fontWeight: FontWeight.w400,
-                    color: AppColors.black,
+                    color: Provider.of<ThemeProvider>(context).switchValue
+                        ? AppColors.white
+                        : AppColors.black,
                     fontSize: MediaQuery.of(context).size.height * 0.023,
                   ),
                 ),
@@ -188,7 +224,9 @@ class _TaskDetailsState extends State<TaskDetails> {
                 style: GoogleFonts.lexendDeca(
                   textStyle: TextStyle(
                     fontWeight: FontWeight.w400,
-                    color: AppColors.grey1,
+                    color: Provider.of<ThemeProvider>(context).switchValue
+                        ? AppColors.white.withOpacity(0.7)
+                        : AppColors.grey1,
                     fontSize: MediaQuery.of(context).size.height * 0.016,
                   ),
                 ),
@@ -207,13 +245,17 @@ class _TaskDetailsState extends State<TaskDetails> {
                   MediaQuery.of(context).size.width * 0.03,
                 ),
               ),
-              tileColor: AppColors.white,
+              tileColor: Provider.of<ThemeProvider>(context).switchValue
+                  ? AppColors.textField
+                  : AppColors.white,
               title: Text(
                 AppTexts.addTime,
                 style: GoogleFonts.lexendDeca(
                   textStyle: TextStyle(
                     fontWeight: FontWeight.w400,
-                    color: AppColors.black,
+                    color: Provider.of<ThemeProvider>(context).switchValue
+                        ? AppColors.white
+                        : AppColors.black,
                     fontSize: MediaQuery.of(context).size.height * 0.023,
                   ),
                 ),
@@ -224,7 +266,9 @@ class _TaskDetailsState extends State<TaskDetails> {
                 style: GoogleFonts.lexendDeca(
                   textStyle: TextStyle(
                     fontWeight: FontWeight.w400,
-                    color: AppColors.grey1,
+                    color: Provider.of<ThemeProvider>(context).switchValue
+                        ? AppColors.white.withOpacity(0.7)
+                        : AppColors.grey1,
                     fontSize: MediaQuery.of(context).size.height * 0.016,
                   ),
                 ),
@@ -239,12 +283,15 @@ class _TaskDetailsState extends State<TaskDetails> {
                 horizontal: MediaQuery.of(context).size.width * 0.04),
             child: MaterialButton(
               onPressed: () {
-                setState(() {
-                  widget.noteModel.archiveOrNot =
-                      !widget.noteModel.archiveOrNot;
-                });
+                Provider.of<HomeProvider>(context, listen: false).updateArchive(
+                  Provider.of<HomeProvider>(context, listen: false)
+                      .notes
+                      .indexOf(widget.noteModel),
+                );
               },
-              color: AppColors.mainColor,
+              color: Provider.of<ThemeProvider>(context).switchValue
+                  ? AppColors.materialButton
+                  : AppColors.mainColor,
               height: MediaQuery.of(context).size.height * 0.06,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(
@@ -254,7 +301,11 @@ class _TaskDetailsState extends State<TaskDetails> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    widget.noteModel.archiveOrNot
+                    Provider.of<HomeProvider>(context)
+                            .notes[Provider.of<HomeProvider>(context)
+                                .notes
+                                .indexOf(widget.noteModel)]
+                            .archiveOrNot
                         ? AppTexts.unarchive
                         : AppTexts.archive,
                     textAlign: TextAlign.center,
@@ -270,7 +321,11 @@ class _TaskDetailsState extends State<TaskDetails> {
                     width: MediaQuery.of(context).size.width * 0.05,
                   ),
                   Icon(
-                    widget.noteModel.archiveOrNot
+                    Provider.of<HomeProvider>(context)
+                            .notes[Provider.of<HomeProvider>(context)
+                                .notes
+                                .indexOf(widget.noteModel)]
+                            .archiveOrNot
                         ? Icons.unarchive_rounded
                         : Icons.archive_rounded,
                     color: AppColors.white,
@@ -291,6 +346,10 @@ class _TaskDetailsState extends State<TaskDetails> {
                   context: context,
                   builder: (context) {
                     return AlertDialog(
+                      backgroundColor:
+                          Provider.of<ThemeProvider>(context).switchValue
+                              ? AppColors.deleteOrNot
+                              : AppColors.white,
                       title: Column(
                         children: [
                           Text(
@@ -300,6 +359,10 @@ class _TaskDetailsState extends State<TaskDetails> {
                                 fontWeight: FontWeight.w600,
                                 fontSize:
                                     MediaQuery.of(context).size.height * 0.022,
+                                color: Provider.of<ThemeProvider>(context)
+                                        .switchValue
+                                    ? AppColors.white
+                                    : AppColors.black,
                               ),
                             ),
                           ),
@@ -308,10 +371,11 @@ class _TaskDetailsState extends State<TaskDetails> {
                             children: [
                               MaterialButton(
                                 onPressed: () {
-                                  notes.removeAt(
-                                      notes.indexOf(widget.noteModel));
-                                  Navigator.pop(context);
-                                  Navigator.pop(context);
+                                  Provider.of<HomeProvider>(context,
+                                          listen: false)
+                                      .deleteNote(
+                                          noteModel: widget.noteModel,
+                                          context: context);
                                 },
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(
@@ -341,7 +405,10 @@ class _TaskDetailsState extends State<TaskDetails> {
                                       MediaQuery.of(context).size.width *
                                           0.015),
                                 ),
-                                color: AppColors.mainColor,
+                                color: Provider.of<ThemeProvider>(context)
+                                        .switchValue
+                                    ? AppColors.materialButton
+                                    : AppColors.mainColor,
                                 child: Text(
                                   AppTexts.cancel,
                                   style: GoogleFonts.lexendDeca(
@@ -393,6 +460,9 @@ class _TaskDetailsState extends State<TaskDetails> {
                 ],
               ),
             ),
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.03,
           ),
         ],
       ),

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:todo/core/shared_widgets/custom_appbar.dart';
 import 'package:todo/core/utils/app_texts.dart';
 import 'package:todo/features/home/presentation/view/task_details.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_images.dart';
+import '../../../login/presentation/controller/theme_controller.dart';
 import '../../data/model/note_model.dart';
+import '../controller/home_controller.dart';
 
 class ArchivedTasks extends StatefulWidget {
   const ArchivedTasks({super.key});
@@ -17,7 +20,8 @@ class ArchivedTasks extends StatefulWidget {
 class _ArchivedTasksState extends State<ArchivedTasks> {
   @override
   Widget build(BuildContext context) {
-    List<NoteModel> archivedList = notes
+    List<NoteModel> archivedList = Provider.of<HomeProvider>(context)
+        .notes
         .where(
           (element) => element.archiveOrNot == true,
         )
@@ -30,10 +34,21 @@ class _ArchivedTasksState extends State<ArchivedTasks> {
       ),
       body: Expanded(
         child: archivedList.isEmpty
-            ? const Center(
-                child: Text("No Archived Tasks"),
+            ? Center(
+                child: Text(
+                  "No Archived Tasks",
+                  style: Theme.of(context).textTheme.displaySmall!.merge(
+                        TextStyle(
+                          fontSize: MediaQuery.of(context).size.height * 0.03,
+                        ),
+                      ),
+                ),
               )
-            : ListView.builder(
+            : ListView.separated(
+                padding: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width * 0.03,
+                  vertical: MediaQuery.of(context).size.height * 0.02,
+                ),
                 itemBuilder: (context, index) {
                   return ListTile(
                     onTap: () {
@@ -44,15 +59,17 @@ class _ArchivedTasksState extends State<ArchivedTasks> {
                         }),
                       );
                     },
+                    tileColor: Provider.of<ThemeProvider>(context).switchValue
+                        ? AppColors.textField
+                        : AppColors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(
                           MediaQuery.of(context).size.width * 0.04),
                     ),
                     trailing: ElevatedButton(
                       onPressed: () {
-                        archivedList[index].archiveOrNot =
-                            !archivedList[index].archiveOrNot;
-                        setState(() {});
+                        Provider.of<HomeProvider>(context, listen: false)
+                            .updateArchive(index);
                       },
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
@@ -63,7 +80,11 @@ class _ArchivedTasksState extends State<ArchivedTasks> {
                             width: MediaQuery.of(context).size.width * 0.005,
                           ),
                         ),
-                        backgroundColor: AppColors.mainColor,
+                        backgroundColor: archivedList[index].doneOrNot
+                            ? AppColors.mainColor
+                            : Provider.of<ThemeProvider>(context).switchValue
+                                ? AppColors.textField
+                                : AppColors.white,
                       ),
                       child: Text(
                         archivedList[index].archiveOrNot
@@ -72,9 +93,15 @@ class _ArchivedTasksState extends State<ArchivedTasks> {
                         style: GoogleFonts.lexendDeca(
                           textStyle: TextStyle(
                             fontWeight: FontWeight.w700,
-                            color: archivedList[index].archiveOrNot
-                                ? AppColors.white
-                                : AppColors.mainColor,
+                            color: archivedList[index].doneOrNot
+                                ? Provider.of<ThemeProvider>(context)
+                                        .switchValue
+                                    ? AppColors.black
+                                    : AppColors.white
+                                : Provider.of<ThemeProvider>(context)
+                                        .switchValue
+                                    ? AppColors.white
+                                    : AppColors.mainColor,
                             fontSize: MediaQuery.of(context).size.height * 0.02,
                           ),
                         ),
@@ -99,6 +126,11 @@ class _ArchivedTasksState extends State<ArchivedTasks> {
                     leading: Image.asset(
                       AppImages.shop,
                     ),
+                  );
+                },
+                separatorBuilder: (context, index) {
+                  return SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.02,
                   );
                 },
                 itemCount: archivedList.length,

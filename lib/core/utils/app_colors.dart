@@ -13,4 +13,7 @@ class AppColors {
   static const Color darkMode = Color(0XFF18283A);
   static const Color materialButton = Color(0XFF3F6188);
   static const Color textField = Color(0XFF24364B);
+  static const Color homeAppBar = Color(0XFF2A4463);
+  static const Color transparent = Colors.transparent;
+  static const Color deleteOrNot = Color(0XFF283F5A);
 }

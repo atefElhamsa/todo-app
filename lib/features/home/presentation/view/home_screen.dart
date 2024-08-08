@@ -1,9 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:todo/core/utils/app_colors.dart';
 import 'package:todo/features/add_note/presentation/view/add_note_screen.dart';
 import 'package:todo/features/home/presentation/view/widgets/home_body.dart';
 import 'package:todo/features/home/presentation/view/widgets/home_drawer.dart';
+import 'package:todo/features/login/presentation/controller/theme_controller.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, required this.photo, required this.name});
@@ -28,13 +30,11 @@ class _HomeScreenState extends State<HomeScreen> {
               MaterialPageRoute(builder: (context) {
                 return const AddNoteScreen();
               }),
-            ).then(
-              (value) {
-                setState(() {});
-              },
             );
           },
-          backgroundColor: AppColors.mainColor,
+          backgroundColor: Provider.of<ThemeProvider>(context).switchValue
+              ? AppColors.materialButton
+              : AppColors.mainColor,
           shape: RoundedRectangleBorder(
             borderRadius:
                 BorderRadius.circular(MediaQuery.of(context).size.width * 0.1),

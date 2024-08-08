@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:todo/features/login/presentation/controller/theme_controller.dart';
 import '../../../../../core/utils/app_colors.dart';
 import '../../../../../core/utils/app_images.dart';
 import '../../../../../core/utils/app_texts.dart';
@@ -15,8 +17,10 @@ class AppBarLogin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        color: AppColors.mainColor,
+      decoration: BoxDecoration(
+        color: Provider.of<ThemeProvider>(context).switchValue
+            ? AppColors.homeAppBar
+            : AppColors.mainColor,
       ),
       child: Row(
         children: [
@@ -40,7 +44,9 @@ class AppBarLogin extends StatelessWidget {
                   style: GoogleFonts.lexendDeca(
                     textStyle: TextStyle(
                       fontWeight: FontWeight.w400,
-                      color: AppColors.blue,
+                      color: Provider.of<ThemeProvider>(context).switchValue
+                          ? AppColors.white
+                          : AppColors.blue,
                       fontSize: MediaQuery.of(context).size.height * 0.025,
                     ),
                   ),
@@ -53,7 +59,9 @@ class AppBarLogin extends StatelessWidget {
                   style: GoogleFonts.lexendDeca(
                     textStyle: TextStyle(
                       fontWeight: FontWeight.w500,
-                      color: AppColors.blue,
+                      color: Provider.of<ThemeProvider>(context).switchValue
+                          ? AppColors.white
+                          : AppColors.blue,
                       fontSize: MediaQuery.of(context).size.height * 0.025,
                     ),
                   ),
@@ -77,7 +85,9 @@ class AppBarLogin extends StatelessWidget {
           Expanded(
             child: CircleAvatar(
               radius: MediaQuery.of(context).size.width * 0.065,
-              backgroundColor: AppColors.white,
+              backgroundColor: Provider.of<ThemeProvider>(context).switchValue
+                  ? AppColors.transparent
+                  : AppColors.white,
               child: CircleAvatar(
                 radius: MediaQuery.of(context).size.width * 0.06,
                 backgroundImage: Image.file(

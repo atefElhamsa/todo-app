@@ -310,7 +310,7 @@ class _LoginBodyState extends State<LoginBody> {
             subTitle: AppTexts.enterYourName,
             borderColor:
                 Provider.of<ThemeProvider>(context, listen: false).switchValue
-                    ? AppColors.white.withOpacity(0.5)
+                    ? AppColors.transparent
                     : AppColors.labni2,
           ),
           SizedBox(
