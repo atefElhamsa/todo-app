@@ -36,4 +36,5 @@ class AppTexts {
   static const String titleAlertDialog = "Are you sure you want to delete\nthis task?";
   static const String settingsBox = "settingsBox";
   static const String switchValue = "switchValue";
+  static const String notesBox = "notesBox";
 }

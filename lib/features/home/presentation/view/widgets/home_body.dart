@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:todo/core/utils/app_colors.dart';
 import 'package:todo/core/utils/app_images.dart';
 import 'package:todo/core/utils/app_texts.dart';
-import 'package:todo/features/home/data/model/note_model.dart';
 import 'package:todo/features/home/presentation/controller/home_controller.dart';
 import 'package:todo/features/home/presentation/view/task_details.dart';
 import 'package:todo/features/login/presentation/view/widgets/appbar.dart';
@@ -25,17 +24,11 @@ class HomeBody extends StatefulWidget {
 class _HomeBodyState extends State<HomeBody> {
   @override
   Widget build(BuildContext context) {
-    List<NoteModel> unarchivedTasks = Provider.of<HomeProvider>(context)
-        .notes
-        .where(
-          (element) => element.archiveOrNot == false,
-        )
-        .toList();
     return Column(
       children: [
         AppBarLogin(photo: widget.photo, name: widget.name),
         Expanded(
-          child: unarchivedTasks.isEmpty
+          child: context.watch<HomeProvider>().notes.isEmpty
               ? Center(
                   child: Text(
                     "No Notes, Please Add Task",
@@ -71,12 +64,8 @@ class _HomeBodyState extends State<HomeBody> {
                               context,
                               MaterialPageRoute(builder: (context) {
                                 return TaskDetails(
-                                    noteModel: unarchivedTasks[index]);
+                                    noteModel: context.watch<HomeProvider>().notes[index]);
                               }),
-                            ).then(
-                              (value) {
-                                setState(() {});
-                              },
                             );
                           },
                           tileColor:
@@ -89,10 +78,7 @@ class _HomeBodyState extends State<HomeBody> {
                           ),
                           trailing: ElevatedButton(
                             onPressed: () {
-                              setState(() {
-                                unarchivedTasks[index].doneOrNot =
-                                    !unarchivedTasks[index].doneOrNot;
-                              });
+                              context.read<HomeProvider>().updateDone(index);
                             },
                             style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
@@ -104,7 +90,7 @@ class _HomeBodyState extends State<HomeBody> {
                                       MediaQuery.of(context).size.width * 0.005,
                                 ),
                               ),
-                              backgroundColor: unarchivedTasks[index].doneOrNot
+                              backgroundColor: context.watch<HomeProvider>().notes[index].doneOrNot
                                   ? AppColors.mainColor
                                   : Provider.of<ThemeProvider>(context)
                                           .switchValue
@@ -116,7 +102,7 @@ class _HomeBodyState extends State<HomeBody> {
                               style: GoogleFonts.lexendDeca(
                                 textStyle: TextStyle(
                                   fontWeight: FontWeight.w700,
-                                  color: unarchivedTasks[index].doneOrNot
+                                  color: context.watch<HomeProvider>().notes[index].doneOrNot
                                       ? Provider.of<ThemeProvider>(context)
                                               .switchValue
                                           ? AppColors.black
@@ -132,7 +118,7 @@ class _HomeBodyState extends State<HomeBody> {
                             ),
                           ),
                           title: Text(
-                            unarchivedTasks[index].title,
+                            context.watch<HomeProvider>().notes[index].title,
                             style: GoogleFonts.lexendDeca(
                               fontWeight: FontWeight.w600,
                               color: Provider.of<ThemeProvider>(context)
@@ -144,7 +130,7 @@ class _HomeBodyState extends State<HomeBody> {
                             ),
                           ),
                           subtitle: Text(
-                            unarchivedTasks[index].time,
+                            context.watch<HomeProvider>().notes[index].time,
                             style: GoogleFonts.lexendDeca(
                               fontWeight: FontWeight.w400,
                               color: AppColors.mainColor,
@@ -159,7 +145,7 @@ class _HomeBodyState extends State<HomeBody> {
                       ),
                     );
                   },
-                  itemCount: unarchivedTasks.length,
+                  itemCount: context.watch<HomeProvider>().notes.length,
                 ),
         ),
       ],

@@ -374,8 +374,9 @@ class _TaskDetailsState extends State<TaskDetails> {
                                   Provider.of<HomeProvider>(context,
                                           listen: false)
                                       .deleteNote(
-                                          noteModel: widget.noteModel,
-                                          context: context);
+                                    noteModel: widget.noteModel,
+                                    context: context,
+                                  );
                                 },
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(
