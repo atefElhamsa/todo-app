@@ -1,4 +1,4 @@
-import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -6,14 +6,15 @@ import 'package:todo/core/utils/app_images.dart';
 import 'package:todo/core/utils/app_texts.dart';
 import 'package:todo/features/home/presentation/view/archived_tasks.dart';
 import 'package:todo/features/home/presentation/view/done_tasks.dart';
+import 'package:todo/features/login/data/model/user_model.dart';
 import 'package:todo/features/login/presentation/controller/theme_controller.dart';
 import '../../../../../core/utils/app_colors.dart';
 
 class HomeDrawer extends StatefulWidget {
-  const HomeDrawer({super.key, required this.name, required this.photo});
+  const HomeDrawer({super.key, required this.userModel});
 
-  final String name;
-  final File photo;
+
+  final UserModel userModel;
 
   @override
   State<HomeDrawer> createState() => _HomeDrawerState();
@@ -52,7 +53,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                     child: CircleAvatar(
                       radius: MediaQuery.of(context).size.width * 0.06,
                       backgroundImage: Image.file(
-                        widget.photo,
+                        widget.userModel.photo,
                         fit: BoxFit.cover,
                       ).image,
                     ),
@@ -60,7 +61,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                 ),
                 Expanded(
                   child: Text(
-                    widget.name.trim(),
+                    widget.userModel.userName.trim(),
                     style: GoogleFonts.lexendDeca(
                       textStyle: TextStyle(
                         fontWeight: FontWeight.w600,
@@ -86,10 +87,6 @@ class _HomeDrawerState extends State<HomeDrawer> {
                   MaterialPageRoute(builder: (context) {
                     return const ArchivedTasks();
                   }),
-                ).then(
-                  (value) {
-                    setState(() {});
-                  },
                 );
               },
               shape: RoundedRectangleBorder(

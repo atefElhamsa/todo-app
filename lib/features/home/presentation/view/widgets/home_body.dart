@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -7,15 +6,15 @@ import 'package:todo/core/utils/app_images.dart';
 import 'package:todo/core/utils/app_texts.dart';
 import 'package:todo/features/home/presentation/controller/home_controller.dart';
 import 'package:todo/features/home/presentation/view/task_details.dart';
+import 'package:todo/features/login/data/model/user_model.dart';
 import 'package:todo/features/login/presentation/view/widgets/appbar.dart';
 
 import '../../../../login/presentation/controller/theme_controller.dart';
 
 class HomeBody extends StatefulWidget {
-  const HomeBody({super.key, required this.photo, required this.name});
+  const HomeBody({super.key, required this.userModel});
 
-  final String name;
-  final File photo;
+  final UserModel userModel;
 
   @override
   State<HomeBody> createState() => _HomeBodyState();
@@ -26,7 +25,9 @@ class _HomeBodyState extends State<HomeBody> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        AppBarLogin(photo: widget.photo, name: widget.name),
+        AppBarLogin(
+          userModel: widget.userModel,
+        ),
         Expanded(
           child: context.watch<HomeProvider>().notes.isEmpty
               ? Center(
@@ -64,7 +65,10 @@ class _HomeBodyState extends State<HomeBody> {
                               context,
                               MaterialPageRoute(builder: (context) {
                                 return TaskDetails(
-                                    noteModel: context.watch<HomeProvider>().notes[index]);
+                                  noteModel: context
+                                      .watch<HomeProvider>()
+                                      .notes[index],
+                                );
                               }),
                             );
                           },
@@ -90,7 +94,10 @@ class _HomeBodyState extends State<HomeBody> {
                                       MediaQuery.of(context).size.width * 0.005,
                                 ),
                               ),
-                              backgroundColor: context.watch<HomeProvider>().notes[index].doneOrNot
+                              backgroundColor: context
+                                      .watch<HomeProvider>()
+                                      .notes[index]
+                                      .doneOrNot
                                   ? AppColors.mainColor
                                   : Provider.of<ThemeProvider>(context)
                                           .switchValue
@@ -102,7 +109,10 @@ class _HomeBodyState extends State<HomeBody> {
                               style: GoogleFonts.lexendDeca(
                                 textStyle: TextStyle(
                                   fontWeight: FontWeight.w700,
-                                  color: context.watch<HomeProvider>().notes[index].doneOrNot
+                                  color: context
+                                          .watch<HomeProvider>()
+                                          .notes[index]
+                                          .doneOrNot
                                       ? Provider.of<ThemeProvider>(context)
                                               .switchValue
                                           ? AppColors.black

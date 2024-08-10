@@ -10,7 +10,6 @@ class ThemeProvider extends ChangeNotifier {
     var box = Hive.box(AppTexts.settingsBox);
     await box.put(AppTexts.switchValue, value);
     switchValue = box.get(AppTexts.switchValue);
-
     notifyListeners();
   }
 

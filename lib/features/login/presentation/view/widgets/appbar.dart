@@ -1,7 +1,7 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:todo/features/login/data/model/user_model.dart';
 import 'package:todo/features/login/presentation/controller/theme_controller.dart';
 import '../../../../../core/utils/app_colors.dart';
 import '../../../../../core/utils/app_images.dart';
@@ -9,10 +9,9 @@ import '../../../../../core/utils/app_texts.dart';
 import '../../../../home/presentation/view/widgets/dayname.dart';
 
 class AppBarLogin extends StatelessWidget {
-  const AppBarLogin({super.key, required this.photo, required this.name});
+  const AppBarLogin({super.key, required this.userModel});
 
-  final String name;
-  final File photo;
+  final UserModel userModel;
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +54,7 @@ class AppBarLogin extends StatelessWidget {
                   height: MediaQuery.of(context).size.height * 0.001,
                 ),
                 Text(
-                  name.trim(),
+                  userModel.userName.trim(),
                   style: GoogleFonts.lexendDeca(
                     textStyle: TextStyle(
                       fontWeight: FontWeight.w500,
@@ -91,7 +90,7 @@ class AppBarLogin extends StatelessWidget {
               child: CircleAvatar(
                 radius: MediaQuery.of(context).size.width * 0.06,
                 backgroundImage: Image.file(
-                  photo,
+                  userModel.photo,
                   fit: BoxFit.cover,
                 ).image,
               ),

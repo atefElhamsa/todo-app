@@ -1,17 +1,16 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/core/utils/app_colors.dart';
 import 'package:todo/features/add_note/presentation/view/add_note_screen.dart';
 import 'package:todo/features/home/presentation/view/widgets/home_body.dart';
 import 'package:todo/features/home/presentation/view/widgets/home_drawer.dart';
+import 'package:todo/features/login/data/model/user_model.dart';
 import 'package:todo/features/login/presentation/controller/theme_controller.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key, required this.photo, required this.name});
+  const HomeScreen({super.key, required this.userModel});
 
-  final String name;
-  final File photo;
+  final UserModel userModel;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -46,12 +45,10 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         drawer: HomeDrawer(
-          name: widget.name,
-          photo: widget.photo,
+          userModel: widget.userModel,
         ),
         body: HomeBody(
-          name: widget.name,
-          photo: widget.photo,
+          userModel: widget.userModel,
         ),
       ),
     );

@@ -10,7 +10,7 @@ import 'package:todo/core/utils/app_colors.dart';
 import 'package:todo/core/utils/app_images.dart';
 import 'package:todo/core/utils/app_texts.dart';
 import 'package:todo/features/home/presentation/view/home_screen.dart';
-
+import 'package:todo/features/login/data/model/user_model.dart';
 import '../../controller/theme_controller.dart';
 
 class LoginBody extends StatefulWidget {
@@ -432,8 +432,10 @@ class _LoginBodyState extends State<LoginBody> {
                       context,
                       MaterialPageRoute(builder: (context) {
                         return HomeScreen(
-                          name: name.text.trim(),
-                          photo: File(image!.path),
+                          userModel: UserModel(
+                            userName: name.text.trim(),
+                            photo: File(image!.path),
+                          ),
                         );
                       }),
                     );
