@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/core/utils/app_images.dart';
 import 'package:todo/core/utils/app_texts.dart';
@@ -162,8 +162,39 @@ class _HomeDrawerState extends State<HomeDrawer> {
               ),
             ),
           ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.02,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Text(
+                Provider.of<ThemeProvider>(context).switchValue
+                    ? AppTexts.lightMode
+                    : AppTexts.darkMode,
+                style: GoogleFonts.lexendDeca(
+                  textStyle: TextStyle(
+                    color: Provider.of<ThemeProvider>(context).switchValue
+                        ? AppColors.white
+                        : AppColors.darkMode,
+                    fontWeight: FontWeight.bold,
+                    fontSize: MediaQuery.of(context).size.height * 0.03,
+                  ),
+                ),
+              ),
+              Switch(
+                value: Hive.box(AppTexts.settingsBox).get(AppTexts.switchValue) ?? false,
+                onChanged: (value) {
+                  Provider.of<ThemeProvider>(context, listen: false)
+                      .changeSwitchValue(value);
+                },
+              ),
+            ],
+          ),
         ],
       ),
     );
   }
 }
+
+

@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 import 'package:todo/core/shared_widgets/custom_appbar.dart';
 import 'package:todo/core/utils/app_texts.dart';
+import 'package:todo/features/home/domain/entities/task_entity.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_images.dart';
 import '../../../login/presentation/controller/theme_controller.dart';
-import '../../data/model/note_model.dart';
 import '../controller/home_controller.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class DoneTasks extends StatefulWidget {
   const DoneTasks({super.key});
@@ -19,10 +21,10 @@ class DoneTasks extends StatefulWidget {
 class _DonTasksState extends State<DoneTasks> {
   @override
   Widget build(BuildContext context) {
-    List<NoteModel> doneList = Provider.of<HomeProvider>(context)
-        .notes
+    List<TaskEntity> doneList = Provider.of<HomeProvider>(context)
+        .tasks
         .where(
-          (element) => element.doneOrNot == true,
+          (element) => element.isCompleted,
         )
         .toList();
     return Scaffold(
@@ -57,18 +59,7 @@ class _DonTasksState extends State<DoneTasks> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        doneList[index].startDate,
-                        style: GoogleFonts.lexendDeca(
-                          fontSize: MediaQuery.of(context).size.height * 0.02,
-                          color:
-                              Provider.of<ThemeProvider>(context).switchValue
-                                  ? AppColors.white.withOpacity(0.6)
-                                  : AppColors.grey2,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      Text(
-                        doneList[index].endDate,
+                        doneList[index].deadline.toString().split(" ")[0],
                         style: GoogleFonts.lexendDeca(
                           fontSize: MediaQuery.of(context).size.height * 0.02,
                           color:
@@ -91,7 +82,7 @@ class _DonTasksState extends State<DoneTasks> {
                     ),
                   ),
                   subtitle: Text(
-                    doneList[index].time,
+                    DateFormat('h:mm a').format(doneList[index].deadline),
                     style: GoogleFonts.lexendDeca(
                       fontWeight: FontWeight.w400,
                       color: AppColors.mainColor,
@@ -101,7 +92,7 @@ class _DonTasksState extends State<DoneTasks> {
                   leading: Image.asset(
                     AppImages.shop,
                   ),
-                );
+                ).animate(delay: (index * 100).ms).fade(duration: 500.ms).slideY(begin: 0.2, end: 0, duration: 500.ms, curve: Curves.easeOutQuad);
               },
               separatorBuilder: (context, index) {
                 return SizedBox(

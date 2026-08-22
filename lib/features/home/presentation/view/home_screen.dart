@@ -6,6 +6,7 @@ import 'package:todo/features/home/presentation/view/widgets/home_body.dart';
 import 'package:todo/features/home/presentation/view/widgets/home_drawer.dart';
 import 'package:todo/features/login/data/model/user_model.dart';
 import 'package:todo/features/login/presentation/controller/theme_controller.dart';
+import 'package:todo/core/services/notification_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, required this.userModel});
@@ -17,6 +18,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    NotificationService().requestPermissions();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -47,9 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
         drawer: HomeDrawer(
           userModel: widget.userModel,
         ),
-        body: HomeBody(
-          userModel: widget.userModel,
-        ),
+        body: HomeBody(userModel: widget.userModel),
       ),
     );
   }

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/core/utils/app_colors.dart';
 import 'package:todo/core/utils/app_images.dart';
 import 'package:todo/core/utils/app_texts.dart';
 import 'package:todo/features/login/presentation/controller/theme_controller.dart';
 import 'package:todo/features/login/presentation/view/login_screen.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class OnBoardingBody extends StatefulWidget {
   const OnBoardingBody({super.key});
@@ -18,69 +18,47 @@ class OnBoardingBody extends StatefulWidget {
 class _OnBoardingBodyState extends State<OnBoardingBody> {
   @override
   Widget build(BuildContext context) {
+    final isDark = Provider.of<ThemeProvider>(context).switchValue;
+
     return Padding(
-      padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.1),
+      padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.08),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Text(
-                Provider.of<ThemeProvider>(context).switchValue
-                    ? AppTexts.lightMode
-                    : AppTexts.darkMode,
-                style: GoogleFonts.lexendDeca(
-                  textStyle: TextStyle(
-                    color: Provider.of<ThemeProvider>(context).switchValue
-                        ? AppColors.white
-                        : AppColors.darkMode,
-                    fontWeight: FontWeight.bold,
-                    fontSize: MediaQuery.of(context).size.height * 0.03,
-                  ),
-                ),
-              ),
-              Switch(
-                value: Hive.box(AppTexts.settingsBox).get(AppTexts.switchValue),
-                onChanged: (value) {
-                  Provider.of<ThemeProvider>(context, listen: false)
-                      .changeSwitchValue(value);
-                },
-              ),
-            ],
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.02,
-          ),
-          Image.asset(AppImages.onBoardingImages),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.05,
-          ),
+          Spacer(flex: 2),
+          Image.asset(
+            AppImages.onBoardingImages,
+            height: MediaQuery.of(context).size.height * 0.3,
+          ).animate().fade(duration: 600.ms).slideY(begin: -0.1, end: 0),
+          Spacer(flex: 1),
           Text(
             AppTexts.toDoListDailyTask,
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.titleLarge!.merge(
-                  TextStyle(
-                    fontSize: MediaQuery.of(context).size.height * 0.035,
-                  ),
-                ),
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.05,
-          ),
+            style: GoogleFonts.lexendDeca(
+              textStyle: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: isDark ? AppColors.white : AppColors.black,
+                fontSize: MediaQuery.of(context).size.height * 0.035,
+                height: 1.2,
+              ),
+            ),
+          ).animate().fade(delay: 200.ms).slideY(begin: 0.1, end: 0),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.03),
           Text(
             AppTexts.descriptionOnBoarding,
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodySmall!.merge(
-                  TextStyle(
-                    fontSize: MediaQuery.of(context).size.height * 0.018,
-                  ),
-                ),
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.05,
-          ),
-          MaterialButton(
-            onPressed: () {
+            style: GoogleFonts.lexendDeca(
+              textStyle: TextStyle(
+                fontWeight: FontWeight.w400,
+                color: AppColors.grey1,
+                fontSize: MediaQuery.of(context).size.height * 0.018,
+                height: 1.5,
+              ),
+            ),
+          ).animate().fade(delay: 300.ms).slideY(begin: 0.1, end: 0),
+          Spacer(flex: 2),
+          GestureDetector(
+            onTap: () {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) {
@@ -88,32 +66,45 @@ class _OnBoardingBodyState extends State<OnBoardingBody> {
                 }),
               );
             },
-            color: Provider.of<ThemeProvider>(context).switchValue
-                ? AppColors.materialButton
-                : AppColors.mainColor,
-            height: MediaQuery.of(context).size.height * 0.06,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(
-                  MediaQuery.of(context).size.width * 0.03),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.07,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                gradient: const LinearGradient(
+                  colors: [AppColors.mainColor, AppColors.blue],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.blue.withOpacity(0.4),
+                    blurRadius: 15,
+                    offset: const Offset(0, 8),
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
                     AppTexts.letStart,
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.displayMedium!.merge(
-                          TextStyle(
-                            fontSize:
-                                MediaQuery.of(context).size.height * 0.025,
-                          ),
-                        ),
+                    style: GoogleFonts.lexendDeca(
+                      textStyle: TextStyle(
+                        fontSize: MediaQuery.of(context).size.height * 0.022,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
-                ),
-                Image.asset(AppImages.arrowRight),
-              ],
+                  SizedBox(width: 10),
+                  const Icon(Icons.arrow_forward_rounded, color: Colors.white),
+                ],
+              ),
             ),
-          ),
+          ).animate().fade(delay: 400.ms).slideY(begin: 0.2, end: 0),
+          Spacer(flex: 1),
         ],
       ),
     );

@@ -37,5 +37,6 @@ class AppTexts {
   static const String settingsBox = "settingsBox";
   static const String switchValue = "switchValue";
   static const String notesBox = "notesBox";
-  static const String userBox = "userBox";
+  static const String userBox = "userBox_v2";
+  static const String userKey = "userKey";
 }

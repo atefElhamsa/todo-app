@@ -1,470 +1,343 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:todo/features/home/data/model/note_model.dart';
+import 'package:intl/intl.dart';
+import '../../domain/entities/task_entity.dart';
 import '../../../../core/shared_widgets/custom_appbar.dart';
 import '../../../../core/utils/app_colors.dart';
-import '../../../../core/utils/app_images.dart';
 import '../../../../core/utils/app_texts.dart';
 import '../../../login/presentation/controller/theme_controller.dart';
 import '../controller/home_controller.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class TaskDetails extends StatefulWidget {
   const TaskDetails({
     super.key,
-    required this.noteModel,
+    required this.task,
   });
 
-  final NoteModel noteModel;
+  final TaskEntity task;
 
   @override
   State<TaskDetails> createState() => _TaskDetailsState();
 }
 
 class _TaskDetailsState extends State<TaskDetails> {
+  Widget _buildDetailCard(BuildContext context, String title, String content,
+      IconData icon, bool isDark,
+      {bool isLarge = false}) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.05),
+      decoration: BoxDecoration(
+        color: isDark ? AppColors.textField : AppColors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          if (!isDark)
+            BoxShadow(
+              color: AppColors.mainColor.withOpacity(0.05),
+              blurRadius: 15,
+              offset: const Offset(0, 5),
+            ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: isDark
+                      ? AppColors.darkMode
+                      : AppColors.labni2.withOpacity(0.2),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(icon, color: AppColors.mainColor, size: 20),
+              ),
+              SizedBox(width: MediaQuery.of(context).size.width * 0.03),
+              Text(
+                title,
+                style: GoogleFonts.lexendDeca(
+                  textStyle: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: isDark ? AppColors.white : AppColors.black,
+                    fontSize: MediaQuery.of(context).size.height * 0.02,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+          Text(
+            content,
+            style: GoogleFonts.lexendDeca(
+              textStyle: TextStyle(
+                fontWeight: FontWeight.w400,
+                color: isDark ? AppColors.grey2 : AppColors.grey1,
+                fontSize: MediaQuery.of(context).size.height * 0.018,
+                height: 1.5,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isDark = Provider.of<ThemeProvider>(context).switchValue;
+
+    Color priorityColor;
+    if (widget.task.priority == TaskPriority.high)
+      priorityColor = AppColors.red;
+    else if (widget.task.priority == TaskPriority.medium)
+      priorityColor = Colors.orange;
+    else
+      priorityColor = AppColors.archivedAndDone;
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize:
-            Size.fromHeight(MediaQuery.of(context).size.height * 0.06),
+            Size.fromHeight(MediaQuery.of(context).size.height * 0.07),
         child: const CustomAppBar(title: AppTexts.taskDetails),
       ),
       body: ListView(
         physics: const BouncingScrollPhysics(),
+        padding: EdgeInsets.symmetric(
+            horizontal: MediaQuery.of(context).size.width * 0.04),
         children: [
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.03,
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.width * 0.04),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Provider.of<ThemeProvider>(context).switchValue
-                    ? AppColors.textField
-                    : AppColors.white,
-                borderRadius: BorderRadius.circular(
-                    MediaQuery.of(context).size.width * 0.03),
-                border: Border.all(
-                  color: Provider.of<ThemeProvider>(context).switchValue
-                      ? AppColors.transparent
-                      : AppColors.labni2,
-                ),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+
+          // Header Card
+          Container(
+            padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.05),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [AppColors.mainColor, AppColors.blue],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
               ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: MediaQuery.of(context).size.width * 0.02),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      AppTexts.taskName,
-                      style: GoogleFonts.lexendDeca(
-                        textStyle: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          color: Provider.of<ThemeProvider>(context).switchValue
-                              ? AppColors.white
-                              : AppColors.black.withOpacity(0.7),
-                          fontSize: MediaQuery.of(context).size.height * 0.025,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.blue.withOpacity(0.3),
+                  blurRadius: 15,
+                  offset: const Offset(0, 8),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.circle, size: 10, color: priorityColor),
+                      SizedBox(width: 8),
+                      Text(
+                        "${widget.task.priority.name.toUpperCase()} PRIORITY",
+                        style: GoogleFonts.lexendDeca(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
                         ),
                       ),
-                    ),
-                    TextFormField(
-                      readOnly: true,
-                      decoration: InputDecoration(
-                        hintText: widget.noteModel.title,
-                        hintStyle: TextStyle(
-                          fontSize: MediaQuery.of(context).size.height * 0.025,
-                          color: Provider.of<ThemeProvider>(context).switchValue
-                              ? AppColors.white.withOpacity(0.7)
-                              : AppColors.grey1,
-                        ),
-                        enabledBorder: InputBorder.none,
-                        focusedBorder: InputBorder.none,
-                        errorBorder: InputBorder.none,
-                        focusedErrorBorder: InputBorder.none,
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
+                SizedBox(height: 15),
+                Text(
+                  widget.task.title,
+                  style: GoogleFonts.lexendDeca(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontSize: MediaQuery.of(context).size.height * 0.03,
+                  ),
+                ),
+              ],
             ),
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.02,
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.width * 0.04),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Provider.of<ThemeProvider>(context).switchValue
-                    ? AppColors.textField
-                    : AppColors.white,
-                borderRadius: BorderRadius.circular(
-                    MediaQuery.of(context).size.width * 0.03),
-                border: Border.all(
-                  color: Provider.of<ThemeProvider>(context).switchValue
-                      ? AppColors.transparent
-                      : AppColors.labni2,
+          ).animate().fade(duration: 400.ms).slideY(begin: 0.1, end: 0),
+
+          SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+
+          _buildDetailCard(
+            context,
+            "Description",
+            widget.task.description,
+            Icons.description_rounded,
+            isDark,
+          ).animate().fade(delay: 100.ms).slideY(begin: 0.1, end: 0),
+
+          SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+
+          Row(
+            children: [
+              Expanded(
+                child: _buildDetailCard(
+                  context,
+                  "Date",
+                  DateFormat('MMM dd, yyyy').format(widget.task.deadline),
+                  Icons.calendar_today_rounded,
+                  isDark,
                 ),
               ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: MediaQuery.of(context).size.width * 0.02),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      AppTexts.description,
-                      style: GoogleFonts.lexendDeca(
-                        textStyle: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          color: Provider.of<ThemeProvider>(context).switchValue
-                              ? AppColors.white
-                              : AppColors.black.withOpacity(0.7),
-                          fontSize: MediaQuery.of(context).size.height * 0.025,
-                        ),
-                      ),
-                    ),
-                    TextFormField(
-                      minLines: 5,
-                      maxLines: 7,
-                      readOnly: true,
-                      decoration: InputDecoration(
-                        hintText: widget.noteModel.description,
-                        hintStyle: TextStyle(
-                          fontSize: MediaQuery.of(context).size.height * 0.025,
-                          color: Provider.of<ThemeProvider>(context).switchValue
-                              ? AppColors.white.withOpacity(0.7)
-                              : AppColors.grey1,
-                        ),
-                        enabledBorder: InputBorder.none,
-                        focusedBorder: InputBorder.none,
-                        errorBorder: InputBorder.none,
-                        focusedErrorBorder: InputBorder.none,
-                      ),
-                    ),
-                  ],
+              SizedBox(width: MediaQuery.of(context).size.width * 0.04),
+              Expanded(
+                child: _buildDetailCard(
+                  context,
+                  "Time",
+                  DateFormat('h:mm a').format(widget.task.deadline),
+                  Icons.access_time_rounded,
+                  isDark,
                 ),
               ),
-            ),
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.04,
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.width * 0.04),
-            child: ListTile(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(
-                      MediaQuery.of(context).size.width * 0.03)),
-              tileColor: Provider.of<ThemeProvider>(context).switchValue
-                  ? AppColors.textField
-                  : AppColors.white,
-              title: Text(
-                AppTexts.startDate,
-                style: GoogleFonts.lexendDeca(
-                  textStyle: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    color: Provider.of<ThemeProvider>(context).switchValue
-                        ? AppColors.white
-                        : AppColors.black,
-                    fontSize: MediaQuery.of(context).size.height * 0.023,
-                  ),
-                ),
-              ),
-              leading: Image.asset(AppImages.calendar),
-              subtitle: Text(
-                widget.noteModel.startDate,
-                style: GoogleFonts.lexendDeca(
-                  textStyle: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    color: Provider.of<ThemeProvider>(context).switchValue
-                        ? AppColors.white.withOpacity(0.7)
-                        : AppColors.grey1,
-                    fontSize: MediaQuery.of(context).size.height * 0.016,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.03,
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.width * 0.04),
-            child: ListTile(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(
-                  MediaQuery.of(context).size.width * 0.03,
-                ),
-              ),
-              tileColor: Provider.of<ThemeProvider>(context).switchValue
-                  ? AppColors.textField
-                  : AppColors.white,
-              title: Text(
-                AppTexts.endDate,
-                style: GoogleFonts.lexendDeca(
-                  textStyle: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    color: Provider.of<ThemeProvider>(context).switchValue
-                        ? AppColors.white
-                        : AppColors.black,
-                    fontSize: MediaQuery.of(context).size.height * 0.023,
-                  ),
-                ),
-              ),
-              leading: Image.asset(AppImages.calendar),
-              subtitle: Text(
-                widget.noteModel.endDate,
-                style: GoogleFonts.lexendDeca(
-                  textStyle: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    color: Provider.of<ThemeProvider>(context).switchValue
-                        ? AppColors.white.withOpacity(0.7)
-                        : AppColors.grey1,
-                    fontSize: MediaQuery.of(context).size.height * 0.016,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.03,
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.width * 0.04),
-            child: ListTile(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(
-                  MediaQuery.of(context).size.width * 0.03,
-                ),
-              ),
-              tileColor: Provider.of<ThemeProvider>(context).switchValue
-                  ? AppColors.textField
-                  : AppColors.white,
-              title: Text(
-                AppTexts.addTime,
-                style: GoogleFonts.lexendDeca(
-                  textStyle: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    color: Provider.of<ThemeProvider>(context).switchValue
-                        ? AppColors.white
-                        : AppColors.black,
-                    fontSize: MediaQuery.of(context).size.height * 0.023,
-                  ),
-                ),
-              ),
-              leading: Image.asset(AppImages.watch),
-              subtitle: Text(
-                widget.noteModel.time,
-                style: GoogleFonts.lexendDeca(
-                  textStyle: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    color: Provider.of<ThemeProvider>(context).switchValue
-                        ? AppColors.white.withOpacity(0.7)
-                        : AppColors.grey1,
-                    fontSize: MediaQuery.of(context).size.height * 0.016,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.05,
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.width * 0.04),
-            child: MaterialButton(
-              onPressed: () {
-                Provider.of<HomeProvider>(context, listen: false).updateArchive(
-                  Provider.of<HomeProvider>(context, listen: false)
-                      .notes
-                      .indexOf(widget.noteModel),
-                );
-              },
-              color: Provider.of<ThemeProvider>(context).switchValue
-                  ? AppColors.materialButton
-                  : AppColors.mainColor,
-              height: MediaQuery.of(context).size.height * 0.06,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(
-                    MediaQuery.of(context).size.width * 0.03),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    Provider.of<HomeProvider>(context)
-                            .notes[Provider.of<HomeProvider>(context)
-                                .notes
-                                .indexOf(widget.noteModel)]
-                            .archiveOrNot
-                        ? AppTexts.unarchive
-                        : AppTexts.archive,
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.lexendDeca(
-                      textStyle: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.white,
-                        fontSize: MediaQuery.of(context).size.height * 0.025,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.05,
-                  ),
-                  Icon(
-                    Provider.of<HomeProvider>(context)
-                            .notes[Provider.of<HomeProvider>(context)
-                                .notes
-                                .indexOf(widget.noteModel)]
-                            .archiveOrNot
-                        ? Icons.unarchive_rounded
-                        : Icons.archive_rounded,
-                    color: AppColors.white,
-                  ),
-                ],
-              ),
-            ),
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.03,
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.width * 0.04),
-            child: MaterialButton(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      backgroundColor:
-                          Provider.of<ThemeProvider>(context).switchValue
-                              ? AppColors.deleteOrNot
-                              : AppColors.white,
-                      title: Column(
-                        children: [
-                          Text(
-                            AppTexts.titleAlertDialog,
-                            style: GoogleFonts.lexendDeca(
-                              textStyle: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize:
-                                    MediaQuery.of(context).size.height * 0.022,
-                                color: Provider.of<ThemeProvider>(context)
-                                        .switchValue
-                                    ? AppColors.white
-                                    : AppColors.black,
-                              ),
-                            ),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              MaterialButton(
-                                onPressed: () {
-                                  Provider.of<HomeProvider>(context,
-                                          listen: false)
-                                      .deleteNote(
-                                    noteModel: widget.noteModel,
-                                    context: context,
-                                  );
-                                },
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                      MediaQuery.of(context).size.width *
-                                          0.015),
-                                ),
-                                color: AppColors.red,
-                                child: Text(
-                                  AppTexts.yes,
-                                  style: GoogleFonts.lexendDeca(
-                                    textStyle: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      color: AppColors.white,
-                                      fontSize:
-                                          MediaQuery.of(context).size.height *
-                                              0.02,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              MaterialButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                      MediaQuery.of(context).size.width *
-                                          0.015),
-                                ),
-                                color: Provider.of<ThemeProvider>(context)
-                                        .switchValue
-                                    ? AppColors.materialButton
-                                    : AppColors.mainColor,
-                                child: Text(
-                                  AppTexts.cancel,
-                                  style: GoogleFonts.lexendDeca(
-                                    textStyle: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      color: AppColors.white,
-                                      fontSize:
-                                          MediaQuery.of(context).size.height *
-                                              0.02,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    );
+            ],
+          ).animate().fade(delay: 200.ms).slideY(begin: 0.1, end: 0),
+
+          SizedBox(height: MediaQuery.of(context).size.height * 0.04),
+
+          // Actions
+          Row(
+            children: [
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    context.read<HomeProvider>().updateArchive(widget.task);
+                    Navigator.pop(context);
                   },
-                );
-              },
-              color: AppColors.red,
-              height: MediaQuery.of(context).size.height * 0.06,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(
-                    MediaQuery.of(context).size.width * 0.03),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    AppTexts.delete,
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.lexendDeca(
-                      textStyle: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.white,
-                        fontSize: MediaQuery.of(context).size.height * 0.025,
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 0.07,
+                    decoration: BoxDecoration(
+                      color: isDark ? AppColors.textField : AppColors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: AppColors.mainColor, width: 2),
+                    ),
+                    child: Center(
+                      child: Text(
+                        widget.task.isArchived
+                            ? AppTexts.unarchive
+                            : AppTexts.archive,
+                        style: GoogleFonts.lexendDeca(
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.mainColor,
+                          fontSize: MediaQuery.of(context).size.height * 0.02,
+                        ),
                       ),
                     ),
                   ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.05,
+                ),
+              ),
+              SizedBox(width: MediaQuery.of(context).size.width * 0.04),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    context.read<HomeProvider>().updateDone(widget.task);
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 0.07,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [AppColors.mainColor, AppColors.blue],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.blue.withOpacity(0.3),
+                          blurRadius: 10,
+                          offset: const Offset(0, 5),
+                        ),
+                      ],
+                    ),
+                    child: Center(
+                      child: Text(
+                        widget.task.isCompleted ? "Unmark Done" : "Mark Done",
+                        style: GoogleFonts.lexendDeca(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontSize: MediaQuery.of(context).size.height * 0.02,
+                        ),
+                      ),
+                    ),
                   ),
-                  const Icon(
-                    Icons.delete_forever_rounded,
-                    color: AppColors.white,
+                ),
+              ),
+            ],
+          ).animate().fade(delay: 300.ms).slideY(begin: 0.2, end: 0),
+
+          SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+
+          GestureDetector(
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    backgroundColor:
+                        isDark ? AppColors.darkMode : AppColors.white,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    title: Text(
+                      AppTexts.titleAlertDialog,
+                      style: GoogleFonts.lexendDeca(
+                        fontWeight: FontWeight.bold,
+                        color: isDark ? AppColors.white : AppColors.black,
+                        fontSize: MediaQuery.of(context).size.height * 0.022,
+                      ),
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: Text("Cancel",
+                            style: TextStyle(color: AppColors.grey1)),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          context
+                              .read<HomeProvider>()
+                              .deleteNote(task: widget.task, context: context);
+                        },
+                        child: Text("Delete",
+                            style: TextStyle(
+                                color: AppColors.red,
+                                fontWeight: FontWeight.bold)),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.07,
+              decoration: BoxDecoration(
+                color: AppColors.red.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Center(
+                child: Text(
+                  AppTexts.delete,
+                  style: GoogleFonts.lexendDeca(
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.red,
+                    fontSize: MediaQuery.of(context).size.height * 0.02,
                   ),
-                ],
+                ),
               ),
             ),
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.03,
-          ),
+          ).animate().fade(delay: 400.ms).slideY(begin: 0.2, end: 0),
+
+          SizedBox(height: MediaQuery.of(context).size.height * 0.05),
         ],
       ),
     );
